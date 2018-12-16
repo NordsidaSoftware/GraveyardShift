@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraveyardShift", "GraveyardShift\GraveyardShift.csproj", "{1D65B9A9-6265-4113-A786-E5F7467013B1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1D65B9A9-6265-4113-A786-E5F7467013B1}.Debug|x86.ActiveCfg = Debug|x86
+		{1D65B9A9-6265-4113-A786-E5F7467013B1}.Debug|x86.Build.0 = Debug|x86
+		{1D65B9A9-6265-4113-A786-E5F7467013B1}.Release|x86.ActiveCfg = Release|x86
+		{1D65B9A9-6265-4113-A786-E5F7467013B1}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {80D88269-846E-4697-AF2B-FAD3CFFFDA3D}
+	EndGlobalSection
+EndGlobal
