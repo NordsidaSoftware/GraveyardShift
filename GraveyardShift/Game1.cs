@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using VAC;
 
 namespace GraveyardShift
 {
@@ -11,11 +12,16 @@ namespace GraveyardShift
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        StateManager stateManager;
+        Virtual_root_Console root;
+        Randomizer randomizer;
+
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            randomizer = new Randomizer(1976);
         }
 
         /// <summary>
@@ -26,8 +32,10 @@ namespace GraveyardShift
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
+            root = new Virtual_root_Console(this, 100, 60);
+            stateManager = new StateManager(this, root);
+           
+  
             base.Initialize();
         }
 
@@ -37,9 +45,8 @@ namespace GraveyardShift
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+           
             // TODO: use this.Content to load your game content here
         }
 
@@ -59,10 +66,8 @@ namespace GraveyardShift
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if ( ! stateManager.Update() )
                 Exit();
-
-            // TODO: Add your update logic here
 
             base.Update(gameTime);
         }
@@ -75,7 +80,9 @@ namespace GraveyardShift
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+            stateManager.Draw(spriteBatch);
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

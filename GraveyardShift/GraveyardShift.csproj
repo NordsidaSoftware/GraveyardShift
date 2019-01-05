@@ -41,9 +41,31 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Creatures\Attacks%27nEffects\Attack.cs" />
+    <Compile Include="Creatures\Attacks%27nEffects\Effect.cs" />
+    <Compile Include="Creatures\Attacks%27nEffects\ZombieEffect.cs" />
+    <Compile Include="Creatures\Components\ComponentsParts.cs" />
+    <Compile Include="Creatures\Components\CreatureController.cs" />
+    <Compile Include="Creatures\Components\EffectsComponent.cs" />
+    <Compile Include="Creatures\Components\MoveComponent.cs" />
+    <Compile Include="Creatures\Components\AttackComponent.cs" />
+    <Compile Include="Creatures\Components\ScoutMonster.cs" />
+    <Compile Include="Creatures\Components\BasicMonster.cs" />
+    <Compile Include="Creatures\Controllers\VicarController.cs" />
+    <Compile Include="Creatures\Controllers\ZombieController.cs" />
+    <Compile Include="ErrorHandler.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Creatures\Creature.cs" />
+    <Compile Include="Creatures\CreatureManager.cs" />
+    <Compile Include="Randomizer.cs" />
+    <Compile Include="States\InGameMenu\IngameMenu.cs" />
+    <Compile Include="States\InGameMenu\ViewActorsMenu.cs" />
+    <Compile Include="States\InGameMenu\ViewDetailActorMenu.cs" />
+    <Compile Include="States\PlayState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="States\StateManager.cs" />
+    <Compile Include="States\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MonoGame.Framework">
@@ -51,6 +73,9 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Xml" />
+    <Reference Include="VAC">
+      <HintPath>..\..\Particles\VAC\bin\Debug\VAC.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
