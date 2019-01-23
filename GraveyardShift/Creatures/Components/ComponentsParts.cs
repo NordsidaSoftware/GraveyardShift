@@ -1,18 +1,22 @@
 ﻿namespace GraveyardShift
 {
     public enum CPMessageType { TARGET,
-        ATTACK,
+        MELEE_ATTACK,
         DAMAGE,
-        EFFECT
+        EFFECT,
+        RANGED_ATTACK,
+        SENSED_ENEMIES_IN_RANGE
     }
     public struct CPMessage
     {
         public CPMessageType type;
+
         public Attack attack;
         public string text;
         public int value;
         public int x_position;
         public int y_position;
+        public ComponentsParts sender;
     }
 
     public abstract class ComponentsParts

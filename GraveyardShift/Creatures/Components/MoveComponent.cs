@@ -18,7 +18,7 @@ namespace GraveyardShift
 
         internal override void Update()
         { 
-            if ( ! owner.body.CanMove) { isActive = false; }
+          //  if ( ! owner.body.CanMove) { isActive = false; }
 
             if (owner.X_pos != Position_Target_X || owner.Y_pos != Position_Target_Y)
             { MoveTo(Position_Target_X, Position_Target_Y); }
@@ -51,17 +51,17 @@ namespace GraveyardShift
 
         private void Move(int dx, int dy)
         {
-            if (owner.X_pos + dx >= 0 && owner.X_pos + dx < owner.manager.worldManager.width)
-                if (owner.Y_pos + dy >= 0 && owner.Y_pos + dy < owner.manager.worldManager.height)
-
-                    if (!owner.manager.worldManager.map[owner.X_pos + dx, owner.Y_pos + dy].blocked)
+            if ( owner.manager.worldManager.IsOnCurrentGrid(owner.X_pos + dx, owner.Y_pos + dy))
+            {
+                if (!owner.manager.worldManager.LocationIsBlocked(owner.X_pos + dx, owner.Y_pos + dy))
+                {
+                    if (!owner.manager.LocationIsOccupied(owner.X_pos + dx, owner.Y_pos + dy))
                     {
-                        if (!owner.manager.LocationIsBlocked(owner.X_pos + dx, owner.Y_pos + dy))
-                        {
-                            owner.X_pos += dx;
-                            owner.Y_pos += dy;
-                        }
+                        owner.X_pos += dx;
+                        owner.Y_pos += dy;
                     }
+                }
+            }
         }
 
        

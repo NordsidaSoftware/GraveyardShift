@@ -1,0 +1,5 @@
+﻿STATE NAME			VALUE			CREATED BY
+-----------------------------------------------------------
+isMobile			bool			Creature
+day					bool			WorldStates
+patrol				bool			SoldierController

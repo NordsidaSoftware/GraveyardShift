@@ -28,7 +28,7 @@ namespace GraveyardShift
         {
             if (owner == null) return;
 
-            Console.WriteLine("Effect : " + name + "(" + owner.ToString() + ")");
+            Console.WriteLine(owner.Name + " : Effect : " + name );
             
             
             foreach ( BodyPart BP in owner.body.bodyparts.Values) {  if ( BP.vital ) { BP.status = BodyPartStatus.DESTROYED; } }

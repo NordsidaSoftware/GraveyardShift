@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace GraveyardShift
 {
     public enum EffectTypes {  ZombieEffect,
-        NONE
+        NONE,
+        BLAST
     }
     public abstract class Effect
     {

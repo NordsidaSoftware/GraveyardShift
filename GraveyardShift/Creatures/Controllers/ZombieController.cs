@@ -10,8 +10,8 @@
         internal override void Initialize()
         {
             Owner.glyph = 'Z';
-            
-            Owner.Speed = 10;
+
+            Owner.Speed = 60;
             Owner.IsActive = true;
             Owner.Faction = Faction.EVIL;
 

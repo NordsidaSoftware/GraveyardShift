@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace GraveyardShift
         public int SensoryDistance;
 
         public Creature Creature_Target;
+        public Creature closest_enemy;
 
         public int Position_Target_X;
         public int Position_Target_Y;
@@ -27,7 +29,7 @@ namespace GraveyardShift
             rnd = Randomizer.GetRandomizer();
 
             state = ZombieStates.Wander;
-            SensoryDistance = 50;
+            SensoryDistance = 5;
 
         }
 
@@ -37,27 +39,33 @@ namespace GraveyardShift
             {
                 case ZombieStates.Wander:
                     {
-                        /*
+                        bool isCloseToEnemy = false;
                         foreach (Creature c in owner.manager.creatures)
                         {
-                            if (c != owner && c.Faction == Faction.GOOD)  // do not detect yourself, recently dead or other walking deads...
+                            if (c != owner && c.Faction != owner.Faction)  // do not detect yourself or friends
                             {
-                               
-                                if (DistanceTo(c.X_pos, c.Y_pos) < SensoryDistance)
-                                {
-                                    Creature_Target = c; state = ZombieStates.Attack;
-                                }
+                                if (DistanceTo(c.X_pos, c.Y_pos) < SensoryDistance) { isCloseToEnemy = true; }
                             }
-                            */
 
-                        Creature closest_enemy = FindClosestEnemyInSensoryRange();
+                        }
+                        if (isCloseToEnemy)
+                        {
+                            closest_enemy = FindClosestEnemyInSensoryRange();
+                            Creature_Target = closest_enemy;
+                            state = ZombieStates.Attack;
+                           
+                        }
+                    
+            
+
+                       
                         if (closest_enemy != null) { Creature_Target = closest_enemy; state = ZombieStates.Attack; }
 
 
-                        else if (rnd.Next(100) > 90)
+                        if (rnd.Next(100) > 50)
                         {
-                            Position_Target_X = rnd.Next(owner.manager.worldManager.width);
-                            Position_Target_Y = rnd.Next(owner.manager.worldManager.height);
+                            Position_Target_X = rnd.Next(0, owner.manager.worldManager.WorldWidth);
+                            Position_Target_Y = rnd.Next(0, owner.manager.worldManager.WorldHeight);
 
                             Send(new CPMessage() { type = CPMessageType.TARGET, x_position = Position_Target_X, y_position = Position_Target_Y });
                         }
@@ -70,13 +78,13 @@ namespace GraveyardShift
                     {
                         if (Creature_Target != null)
                         {
-                            if (!Creature_Target.IsActive || !Creature_Target.body.IsAlive) { Creature_Target = null; state = ZombieStates.Wander; break; } // job done!
+                            if (! Creature_Target.body.IsAlive ) { Creature_Target = null; state = ZombieStates.Wander; break; } // job done!
 
                             if (DistanceTo(Creature_Target.X_pos, Creature_Target.Y_pos) < 2)
                             {
                                 Send(new CPMessage()
                                 {
-                                    type = CPMessageType.ATTACK,
+                                    type = CPMessageType.MELEE_ATTACK,
                                     x_position = Creature_Target.X_pos,
                                     y_position = Creature_Target.Y_pos
 
@@ -103,6 +111,38 @@ namespace GraveyardShift
             // flood fill from creature position.
             // if location contains enemy creature, return it
             // else return null
+
+            List<Point> visited = new List<Point>();
+            Queue<Point> frontier = new Queue<Point>();
+
+            Point origin = new Point(owner.X_pos, owner.Y_pos);
+            frontier.Enqueue(origin);
+
+
+            while (frontier.Count > 0)
+            {
+                Point current = frontier.Dequeue();
+                visited.Add(current);
+
+
+                Creature c = owner.manager.GetCreatureAtLocation(current);
+                if (c != null && c != owner && c.Faction != owner.Faction)
+                {
+                    return owner.manager.GetCreatureAtLocation(current);
+                }
+
+                List<Point> neighbors = GetNeighborCells(current);
+                foreach (Point point in neighbors)
+                {
+                    if (visited.Contains(point)) { continue; }
+                    if (DistanceTo(point.X, point.Y) > SensoryDistance) { continue; }
+                    frontier.Enqueue(point);
+                }
+
+
+            }
+
+            return null;
         }
 
         private double DistanceTo(int x, int y)                  // Zomies don t need eyes or ears !
@@ -111,6 +151,18 @@ namespace GraveyardShift
             int dy = y - owner.Y_pos;
             double distance = Math.Sqrt(dx * dx + dy * dy);
             return distance;
+        }
+
+
+        private List<Point> GetNeighborCells(Point current)
+        {
+            List<Point> returnList = new List<Point>();
+            if ( current.X - 1 >= 0 ) { returnList.Add(new Point(current.X - 1, current.Y)); }
+            if ( current.X + 1 <= owner.manager.worldManager.WorldWidth ) { returnList.Add(new Point(current.X + 1, current.Y)); }
+            if ( current.Y - 1 >= 0 ) { returnList.Add(new Point(current.X, current.Y - 1)); }
+            if ( current.Y + 1 <= owner.manager.worldManager.WorldHeight) { returnList.Add(new Point(current.X, current.Y + 1)); }
+
+            return returnList;
         }
 
         internal override void Recieve(CPMessage message)

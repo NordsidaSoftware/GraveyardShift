@@ -22,7 +22,7 @@ namespace GraveyardShift
             {
                 damaged_bodyPart.hitPoints -= message.attack.attack_damage;
                 damaged_bodyPart.status += 1;
-                Console.WriteLine(owner.ToString() + " : " + damaged_bodyPart.name + "(" + message.attack.name + ")" +
+                Console.WriteLine(owner.Name + " : " + damaged_bodyPart.name + "(" + message.attack.name + ")" +
                                                        message.attack.attack_damage + "=" +
                                                        (BodyPartStatus)damaged_bodyPart.status);
                 if ((int)damaged_bodyPart.status > 5)
@@ -56,7 +56,13 @@ namespace GraveyardShift
                                     break;
                                 }
                                 else { break; }
-                            }      
+                            }
+
+                        case EffectTypes.BLAST:
+                            {
+                                owner.glyph = 'A';
+                                break;
+                            }
                     }
                 }
             } 

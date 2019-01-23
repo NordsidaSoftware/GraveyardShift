@@ -44,15 +44,23 @@
     <Compile Include="Creatures\Attacks%27nEffects\Attack.cs" />
     <Compile Include="Creatures\Attacks%27nEffects\Effect.cs" />
     <Compile Include="Creatures\Attacks%27nEffects\ZombieEffect.cs" />
+    <Compile Include="Creatures\Components\AI\GOAP\FSM.cs" />
+    <Compile Include="Creatures\Components\AI\GOAP\FSMstate.cs" />
+    <Compile Include="Creatures\Components\AI\GOAP\GOAPlanner.cs" />
+    <Compile Include="Creatures\Components\AI\GOAP\GOAP_action.cs" />
+    <Compile Include="Creatures\Components\AI\GOAP\IGoap.cs" />
     <Compile Include="Creatures\Components\ComponentsParts.cs" />
     <Compile Include="Creatures\Components\CreatureController.cs" />
     <Compile Include="Creatures\Components\EffectsComponent.cs" />
     <Compile Include="Creatures\Components\MoveComponent.cs" />
     <Compile Include="Creatures\Components\AttackComponent.cs" />
-    <Compile Include="Creatures\Components\ScoutMonster.cs" />
-    <Compile Include="Creatures\Components\BasicMonster.cs" />
+    <Compile Include="Creatures\Components\AI\AIManager.cs" />
+    <Compile Include="Creatures\Components\AI\BasicMonster.cs" />
     <Compile Include="Creatures\Controllers\VicarController.cs" />
     <Compile Include="Creatures\Controllers\ZombieController.cs" />
+    <Compile Include="Creatures\Item.cs" />
+    <Compile Include="Creatures\Controllers\SoldierController.cs" />
+    <Compile Include="Creatures\WorldStates.cs" />
     <Compile Include="ErrorHandler.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Creatures\Creature.cs" />
@@ -79,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="MEMO.txt" />
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />

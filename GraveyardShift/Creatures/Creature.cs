@@ -6,6 +6,59 @@ namespace GraveyardShift
 {
     public enum Faction { EVIL, GOOD }
 
+
+    public class Inventory
+    {
+        public Creature owner;
+        public List<Item>items;
+
+        public Inventory(Creature owner)
+        {
+            this.owner = owner;
+            items = new List<Item>();
+        }
+
+        public void AddItem(Item i )
+        {
+            items.Add(i);
+        }
+
+        internal List<Item> GetAvailableItemAttacks()
+        {
+            List<Item> returnList = new List<Item>();
+            foreach (Item i in items)
+
+            {
+                if ( i.attack != null) { returnList.Add(i); }
+            }
+
+            return returnList;
+        }
+
+        internal Item GetLongestDistanceWeapon()
+        {
+            int range = 100;
+            Item selected_item = null;
+            foreach ( Item i in items )
+            {
+                if ( i.range < range ) { range = i.range; selected_item = i; }
+            }
+
+            return selected_item;
+        }
+
+        internal List<Attack> GetRangedAttacks()
+        {
+            List<Attack> returnList = new List<Attack>();
+            foreach ( Item i in items)
+            {
+                if ( i.range > 2 ) { returnList.Add(i.attack); }
+            }
+            return returnList;
+        }
+    }
+
+
     public class Body
     {
         public Dictionary<string, BodyPart> bodyparts;
@@ -48,7 +101,17 @@ namespace GraveyardShift
 
             return returnDict;
         }
-       
+
+        internal int GetAllSensoryValues()
+        {
+            int SensoryValue = 1;
+            foreach ( BodyPart BP in bodyparts.Values)
+            {
+                if ( BP.sensory > 0 ) { SensoryValue += BP.sensory; }
+            }
+            return SensoryValue;
+
+        }
     }
 
     public enum BodyPartStatus { OK = 0, BRUISED = 1, CUT_SURFACE = 2, CUT_DEEP = 3, MAIMED = 4, DESTROYED = 5, LOST = 6}
@@ -62,6 +125,7 @@ namespace GraveyardShift
         public bool vital;
         public BodyPartStatus status;
         public Attack attack;
+        internal int sensory;
 
         public override string ToString()
         {
@@ -88,6 +152,7 @@ namespace GraveyardShift
         public List<ComponentsParts> components { get; }
         public Body body { get; internal set; }
         public CreatureController controller { get; internal set; }
+        public Inventory Inventory { get; internal set; }
 
         public CreatureManager manager;
 
@@ -99,6 +164,7 @@ namespace GraveyardShift
             body = new Body();
             components = new List<ComponentsParts>();
             effects = new List<Effect>();
+            Inventory = new Inventory(this);
 
         }
 
@@ -126,6 +192,17 @@ namespace GraveyardShift
             {
                 CP.Recieve(cpMessage);
             }
+        }
+
+        internal Dictionary<string, object> GetWorldStates()
+        {
+            Dictionary<string, object> States = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, object> KVP in manager.worldStates.GetWorldStates())
+            {
+                States.Add(KVP.Key, KVP.Value);
+            }
+            States.Add("isMobile", body.CanMove);                                   // Ex. of creature 'local' state
+            return States;
         }
     }
 }
