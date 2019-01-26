@@ -16,15 +16,15 @@ namespace GraveyardShift
 
         public CreatureManager creatureManager;
 
-        public PlayState(StateManager manager, Virtual_root_Console root, int width, int height) 
+        public PlayState(StateManager manager, WorldManager world, CreatureManager creature, Virtual_root_Console root, int width, int height) 
             : base(manager, root)
         {
             screen = root.AddConsole(width, height);
             screen.X_Offset = 10;
             consoles.Add(screen);
 
-            world = new WorldManager(width, height);
-            creatureManager = new CreatureManager(world);
+            this.world = world;
+            this.creatureManager = creature;
             
         }
 
@@ -42,11 +42,21 @@ namespace GraveyardShift
 
         public override void Draw()
         {
-            root.Clear(screen, VAColor.Green);
+            root.Clear(screen, VAColor.DarkGreen);
             world.Draw(screen);
             creatureManager.Draw(screen);
 
             base.Draw();
+        }
+
+        public override void OnExit()
+        {
+            foreach ( VirtualConsole con in consoles)
+            {
+                root.Clear(con);
+            }
+
+            root.Flush();
         }
 
     }

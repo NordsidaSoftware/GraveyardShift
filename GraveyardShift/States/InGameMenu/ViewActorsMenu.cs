@@ -10,7 +10,7 @@ namespace GraveyardShift
 {
     public class ViewActorsMenu : State
     {
-        int hilite = 3;
+        int hilite;
         VirtualConsole menu;
         IngameMenu ingameMenu;
         public ViewActorsMenu(StateManager manager, Virtual_root_Console root, IngameMenu ingameMenu) : base(manager, root)
@@ -21,7 +21,8 @@ namespace GraveyardShift
             consoles.Add(menu);
             root.Print(menu, 1, 1, "Creatures");
             root.Print(menu, 1, 2, "---------");
-           
+
+            hilite = ingameMenu.playState.creatureManager.creatures.Count - 1; /// ?
 
 
         }
@@ -32,7 +33,7 @@ namespace GraveyardShift
             foreach (Creature c in ingameMenu.playState.creatureManager.creatures)
             {
                 if ( line == hilite) { root.SetForegroundColor(menu, VAColor.Red); }
-                else { root.SetForegroundColor(menu, VAColor.White); }
+                else { root.SetForegroundColor(menu, VAColor.NavajoWhite); }
                 root.Print(menu, 1, line + 3, c.Name);
                 line++;
             }
@@ -54,7 +55,7 @@ namespace GraveyardShift
             if (root.input.wasKeyPressed(Keys.Down))
             {
                 hilite++;
-                if (hilite > ingameMenu.playState.creatureManager.creatures.Count)
+                if (hilite > ingameMenu.playState.creatureManager.creatures.Count-1)
                 {
                     hilite = 0;
                 }
@@ -64,7 +65,7 @@ namespace GraveyardShift
                 hilite--;
                 if (hilite < 0)
                 {
-                    hilite = ingameMenu.playState.creatureManager.creatures.Count ;
+                    hilite = ingameMenu.playState.creatureManager.creatures.Count-1 ;
                 }
 
 

@@ -19,7 +19,7 @@ namespace GraveyardShift
             menu = new VirtualConsole(60, 60);
             details = new VirtualConsole(60, 30);
             details.X_Offset = menu.screen_width;
-            root.SetBackgroundColor(details, VAColor.Blue);
+            root.SetBackgroundColor(details, VAColor.DarkGreen);
             consoles.Add(menu);
             consoles.Add(details);
         }

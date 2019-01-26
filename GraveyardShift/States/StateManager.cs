@@ -54,7 +54,8 @@ namespace GraveyardShift
 
         private void InitializeStates()
         {
-            PushState(new PlayState(this,root, 60, 40));
+            
+            PushState(new MainMenuState(this, root, 60, 40));
            
         }
 

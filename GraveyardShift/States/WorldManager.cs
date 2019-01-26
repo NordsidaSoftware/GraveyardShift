@@ -8,6 +8,8 @@ namespace GraveyardShift
     public struct Location
     {
         public Glyph glyph;
+        public VAColor fgColor;
+        public VAColor bgColor;
         public bool blocked;
         public bool blockSight;
     }
@@ -149,9 +151,9 @@ namespace GraveyardShift
         {
            
             // 1. Set all cells to random height
-            for (int y = 0; y < sourceMap.HeightMap.GetLength(1); y++)
+            for (int y = 1; y < sourceMap.HeightMap.GetLength(1)-1; y++)
             {
-                for (int x = 0; x < sourceMap.HeightMap.GetLength(0); x++)
+                for (int x = 1; x < sourceMap.HeightMap.GetLength(0)-1; x++)
                 {
                     sourceMap.HeightMap[x, y] = rnd.Next(9);
                 }
@@ -202,15 +204,75 @@ namespace GraveyardShift
 
         private void SetupMap(Map sourceMap)
         {
+
+            // 1. Set background color of location based on height
+            VAColor topColor = VAColor.LightGreen;
+            VAColor bottomColor = VAColor.DarkGreen;
+
             for (int x = 0; x < sourceMap.Width; x++)
             {
                 for (int y = 0; y < sourceMap.Height; y++)
                 {
+                    Location newLoc = new Location();
+                    newLoc.glyph = Glyph.PERIOD;
+                    newLoc.fgColor = VAColor.WhiteSmoke;
+                    newLoc.blocked = false;
+                    newLoc.blockSight = false;
 
-                    sourceMap[x, y] = new Location() { glyph = Glyph.PERIOD, blocked = false, blockSight = false };
-                    VAColorManager.RLColor.AliceBlue
+                    newLoc.bgColor = VAColor.Blend(topColor, bottomColor, (sourceMap.HeightMap[x, y] / 4.0f));
+
+                    sourceMap[x, y] = newLoc;
                 }
-            }   
+            }
+
+            // Set right edge contourline, bottom edge contourline and lower right corner glyph and color
+
+            for (int y = 0; y < sourceMap.Height - 1; y++)
+            {
+                for (int x = 0; x < sourceMap.Width - 1; x++)
+                {
+            bool right = false;
+            bool bottom = false;
+                    int CurrentGridHeight = GetGridHeight(x, y);
+                    if (GetGridHeight(x + 1, y) < CurrentGridHeight)
+                    {
+                        Location l = sourceMap[x + 1, y];
+                        l.bgColor = VAColor.SaddleBrown;
+                        sourceMap[x + 1, y] = l;
+                        right = true;
+                    }
+
+                    if (GetGridHeight(x , y+1) < CurrentGridHeight)
+                    {
+                        Location l = sourceMap[x, y+1];
+                        l.bgColor = VAColor.SaddleBrown;
+                        sourceMap[x, y+1] = l;
+                        bottom = true;
+                    }
+
+                    if (GetGridHeight(x + 1, y + 1) < CurrentGridHeight)
+                    {
+                        if (right && bottom)
+                        {
+                            Location l = sourceMap[x + 1, y + 1];
+                            l.bgColor = VAColor.SaddleBrown;
+                            l.fgColor = VAColor.SandyBrown;
+                            l.glyph = Glyph.BACK_SLASH;
+                            sourceMap[x + 1, y + 1] = l;
+                        }
+                    }
+
+
+                }
+
+            }
+            int GetGridHeight(int x, int y)
+            {
+                int neighborHeight = sourceMap.TryGetHeight(x, y);
+                if (neighborHeight == -1) { return rnd.Next(9); }
+                else return neighborHeight;
+
+            }
         }
 
         internal void Update()
@@ -225,7 +287,7 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < WorldHeight; y++)
                 { 
-                    screen.PutGlyphBackGround(currentGrid[x, y].glyph, x, y, currentGrid.HeightMap[x,y]);
+                    screen.PutGlyphForeBack(currentGrid[x, y].glyph, x, y, currentGrid[x,y].fgColor, currentGrid[x,y].bgColor);
                 }
             }
         }

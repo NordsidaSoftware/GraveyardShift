@@ -87,4 +87,6 @@ namespace GraveyardShift
             base.Draw(gameTime);
         }
     }
+
+    //TODO :Make console screens know their center
 }
