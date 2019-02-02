@@ -1,38 +1,24 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework.Input;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using VAC;
 
 namespace GraveyardShift
 {
     [Serializable]
-    internal class SoldierController : CreatureController,IGoap
+    class PlayerController : CreatureController
     {
-        public List<GOAP_action> Actions;
-        public Dictionary<string, object> Goals;
+        [NonSerialized]
+        Virtual_root_Console root;
 
-        public SoldierController(Creature owner) : base(owner)
+        Player player;
+        public PlayerController(Creature owner, Virtual_root_Console root) : base(owner)
         {
-            Actions = new List<GOAP_action>();
-            Goals = new Dictionary<string, object>();
-            // TODO : move action field to creature class ( where the getWorldStates method resides...Make all creatures GOAP compatible
-        }
-
-        internal override void Initialize()
-        {
-            Owner.glyph = (int)Glyph.FACE2;
-
-            Owner.Speed = 30;
-            Owner.IsActive = true;
-            Owner.Faction = Faction.GOOD;
-
-           
-            Owner.components.Add(new FSM(Owner));
-
-            Owner.components.Add(new MoveComponent(Owner));
-            Owner.components.Add(new EffectComponent(Owner));
-
-            Actions.Add(new GOAP_action_PATROL());
-            Goals.Add("patrol", true);
+            this.root = root;
+            player = (Player)Owner;
         }
 
         internal override void CreateBody()
@@ -61,32 +47,24 @@ namespace GraveyardShift
             Owner.body.bodyparts.Add("Right foot", right_foot);
         }
 
+        internal override void Initialize()
+        {
+            Owner.Name = "This is you";
+            Owner.IsActive = true;
+            Owner.glyph = (int)Glyph.FACE1;
+            Owner.color = VAColor.Red;
+            Owner.Faction = Faction.NEUTRAL;
+            Owner.X_pos = 25;
+            Owner.Y_pos = 25;
+            Owner.Speed = 1;
+        }
+
         internal override void Update()
         {
-            // Spesific Soldier update processing
-        }
-
-        public override string ToString()
-        {
-            return "Soldier";
-        }
-
-        public Dictionary<string, object> GetWorldState()
-        {
-            Dictionary<string, object> myCollectedWorldStates = Owner.GetWorldStates();
-            // here I can add CreatureController worldStates
-
-            return myCollectedWorldStates;
-        }
-
-        public Dictionary<string, object> GetGoalsState()
-        {
-            return Goals;
-        }
-
-        public List<GOAP_action> GetActions()
-        {
-            return Actions;
+            if (root.input.isKeyPressed(Keys.Left)) { player.Move(-1, 0); }
+            if (root.input.isKeyPressed(Keys.Right)) {  player.Move(1, 0); }
+            if (root.input.isKeyPressed(Keys.Up)) {  player.Move(0, -1); }
+            if (root.input.isKeyPressed(Keys.Down)) { player.Move(0, 1); }
         }
     }
 }

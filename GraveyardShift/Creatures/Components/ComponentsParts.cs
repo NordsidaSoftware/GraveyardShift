@@ -1,11 +1,14 @@
-﻿namespace GraveyardShift
+﻿using System;
+
+namespace GraveyardShift
 {
     public enum CPMessageType { TARGET,
         MELEE_ATTACK,
         DAMAGE,
         EFFECT,
         RANGED_ATTACK,
-        SENSED_ENEMIES_IN_RANGE
+        SENSED_ENEMIES_IN_RANGE,
+        MOVE
     }
     public struct CPMessage
     {
@@ -19,6 +22,7 @@
         public ComponentsParts sender;
     }
 
+    [Serializable]
     public abstract class ComponentsParts
     {
         internal Creature owner;

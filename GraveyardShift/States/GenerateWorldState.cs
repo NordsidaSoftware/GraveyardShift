@@ -36,7 +36,10 @@ namespace GraveyardShift
 
         public override void OnEnter()
         {
-            world = new WorldManager(width, height);
+            int MapWidth = 200;
+            int MapHeight = 200;
+
+            world = new WorldManager(MapWidth, MapHeight, 2, 2, width, height);
             creatureManager = new CreatureManager(world);
 
             main.world = world;
@@ -51,7 +54,10 @@ namespace GraveyardShift
 
         public override void Update()
         {
-            if ( root.input.wasKeyPressed(Keys.Enter)) { manager.PopState(); }
+            if (root.input.wasKeyPressed(Keys.Enter))
+            {
+                manager.PushState(new CharacterGenerationMenu(manager, world, creatureManager, root));
+            }
             base.Update();
         }
     }

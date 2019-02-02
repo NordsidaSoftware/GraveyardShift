@@ -1,7 +1,9 @@
-﻿using VAC;
+﻿using System;
+using VAC;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public class VicarController : CreatureController
     {
         public VicarController(Creature owner) : base(owner)

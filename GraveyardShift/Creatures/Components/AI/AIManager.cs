@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public abstract class AI_ACTION
     {
         public string name;
@@ -17,6 +18,7 @@ namespace GraveyardShift
         public abstract void OnExit();
 
     }
+    [Serializable]
     public class AIManager : ComponentsParts
     {
         
@@ -177,8 +179,8 @@ namespace GraveyardShift
             if (rnd.Next(0, 100) > 75 )
             {
 
-                Position_Target_X = rnd.Next(brain.owner.manager.worldManager.WorldWidth);
-                Position_Target_Y = rnd.Next(brain.owner.manager.worldManager.WorldHeight);
+                Position_Target_X = rnd.Next(brain.owner.manager.worldManager.MapWidth);
+                Position_Target_Y = rnd.Next(brain.owner.manager.worldManager.MapHeight);
                 brain.Send(new CPMessage() { type = CPMessageType.TARGET,
                                                x_position = Position_Target_X,
                                                y_position = Position_Target_Y });

@@ -64,8 +64,8 @@ namespace GraveyardShift
 
                         if (rnd.Next(100) > 50)
                         {
-                            Position_Target_X = rnd.Next(0, owner.manager.worldManager.WorldWidth);
-                            Position_Target_Y = rnd.Next(0, owner.manager.worldManager.WorldHeight);
+                            Position_Target_X = rnd.Next(0, owner.manager.worldManager.MapWidth);
+                            Position_Target_Y = rnd.Next(0, owner.manager.worldManager.MapHeight);
 
                             Send(new CPMessage() { type = CPMessageType.TARGET, x_position = Position_Target_X, y_position = Position_Target_Y });
                         }
@@ -158,9 +158,9 @@ namespace GraveyardShift
         {
             List<Point> returnList = new List<Point>();
             if ( current.X - 1 >= 0 ) { returnList.Add(new Point(current.X - 1, current.Y)); }
-            if ( current.X + 1 <= owner.manager.worldManager.WorldWidth ) { returnList.Add(new Point(current.X + 1, current.Y)); }
+            if ( current.X + 1 <= owner.manager.worldManager.MapWidth ) { returnList.Add(new Point(current.X + 1, current.Y)); }
             if ( current.Y - 1 >= 0 ) { returnList.Add(new Point(current.X, current.Y - 1)); }
-            if ( current.Y + 1 <= owner.manager.worldManager.WorldHeight) { returnList.Add(new Point(current.X, current.Y + 1)); }
+            if ( current.Y + 1 <= owner.manager.worldManager.MapHeight) { returnList.Add(new Point(current.X, current.Y + 1)); }
 
             return returnList;
         }

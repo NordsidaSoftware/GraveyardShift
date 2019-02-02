@@ -5,6 +5,7 @@ using VAC;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public  class CreatureManager
     {
         public List<Creature> creatures;
@@ -20,6 +21,7 @@ namespace GraveyardShift
             worldManager = world;
 
             worldStates = new WorldStates(world, creatures);
+            
             for (int i = 0; i < 3; i++)
             {
                 Creature c = new Creature(this)
@@ -117,15 +119,20 @@ namespace GraveyardShift
 
         internal void Draw(VirtualConsole map)
         {
-            
-            foreach ( Creature c in creatures )
+
+            foreach (Creature c in creatures)
             {
-                if (map.IsInBounds(c.X_pos, c.Y_pos))
-                {
-                    map.PutGlyph(c.glyph, c.X_pos, c.Y_pos);
-                }
+               
+                        map.PutGlyph(c.glyph,
+                        c.X_pos - worldManager.Camera.X,
+                        c.Y_pos - worldManager.Camera.Y,
+                        c.color);
+               
             }
+
         }
+
+      
 
         internal bool LocationIsOccupied(int x, int y)
         {

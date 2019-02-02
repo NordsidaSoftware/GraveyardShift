@@ -4,9 +4,9 @@ using VAC;
 
 namespace GraveyardShift
 {
-    public enum Faction { EVIL, GOOD }
+    public enum Faction { EVIL, GOOD, NEUTRAL }
 
-
+    [Serializable]
     public class Inventory
     {
         public Creature owner;
@@ -58,7 +58,7 @@ namespace GraveyardShift
         }
     }
 
-
+    [Serializable]
     public class Body
     {
         public Dictionary<string, BodyPart> bodyparts;
@@ -116,6 +116,7 @@ namespace GraveyardShift
 
     public enum BodyPartStatus { OK = 0, BRUISED = 1, CUT_SURFACE = 2, CUT_DEEP = 3, MAIMED = 4, DESTROYED = 5, LOST = 6}
 
+    [Serializable]
     public class BodyPart
     {
         public string name;
@@ -133,21 +134,23 @@ namespace GraveyardShift
         }
     }
 
-
+    [Serializable]
     public class Creature
     {
         public string Name { get; set; }
         public int Speed { get; internal set; }
         public int X_pos { get; internal set; }
         public int Y_pos { get; internal set; }
+
+        public int RegionX { get; internal set; }
+        public int RegionY { get; internal set; }
+
         public int glyph { get; internal set; }
+        public VAColor color;
         public bool IsActive { get; internal set; }
         public Faction Faction { get; set; }
 
         public List<Effect> effects;
-
-        //public int target_X;
-        //public int target_Y;
 
         public List<ComponentsParts> components { get; }
         public Body body { get; internal set; }
@@ -157,6 +160,7 @@ namespace GraveyardShift
         public CreatureManager manager;
 
         private int energy = 0;
+        
 
         public Creature(CreatureManager manager)
         {
@@ -165,6 +169,9 @@ namespace GraveyardShift
             components = new List<ComponentsParts>();
             effects = new List<Effect>();
             Inventory = new Inventory(this);
+
+            // default color : white
+            color = VAColor.AntiqueWhite;
 
         }
 
@@ -177,6 +184,7 @@ namespace GraveyardShift
             else { return; }
 
             controller.Update();
+
             foreach (ComponentsParts CP in components)
             {
                 if (CP.isActive)

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
+using System.IO;
 using VAC;
 
 namespace GraveyardShift
@@ -28,9 +29,11 @@ namespace GraveyardShift
 
 
             Options = new List<string>();
-            Options.Add("Quit");
-            Options.Add("Play");
-            Options.Add("Generate World");
+            Options.Add("Quit");       
+            Options.Add("Play");        
+            Options.Add("Generate World"); 
+            Options.Add("Save");      
+            Options.Add("Test");
             generated = false;
 
             TopScreen =  root.AddConsole(width, 5);
@@ -98,13 +101,55 @@ namespace GraveyardShift
                         }
                     case "Generate World":
                         {
-                            manager.PushState(new GenerateWorldState(manager, this, root, 60, 40));
-                            generated = true;                         
+                            if (!generated)
+                            {
+                                manager.PushState(new GenerateWorldState(manager, this, root, 60, 40));
+                                generated = true;
+                            }
+                            break;
+                        }
+                    case "Save":
+                        {
+                            SaveGame();
+                            break;
+                        }
+                    case "Test":
+                        {
+                            manager.PushState(new WorldTestState(manager, this, root, 60, 40));
                             break;
                         }
                 }
             }
         }
+
+        private void SaveGame()
+        {
+            WriteToBinaryFile<WorldManager>("World.bin", world);
+            WriteToBinaryFile<CreatureManager>("Creatures.bin", creatureManager);
+        }
+
+       
+
+        public static void WriteToBinaryFile<T>(string filePath, T objectToWrite, bool append = false)
+        {
+            using (Stream stream = File.Open(filePath, append ? FileMode.Append : FileMode.Create))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                binaryFormatter.Serialize(stream, objectToWrite);
+                
+            }
+        }
+
+
+        public static T ReadFromBinaryFile<T>(string filePath)
+        {
+            using (Stream stream = File.Open(filePath, FileMode.Open))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                return (T)binaryFormatter.Deserialize(stream);
+            }
+        }
+
 
     }
 }

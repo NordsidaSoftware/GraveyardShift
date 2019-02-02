@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public class Attack
     {
         public string name;

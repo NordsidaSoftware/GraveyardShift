@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public class WorldStates
     {
         private WorldManager world;

@@ -1,5 +1,8 @@
-﻿namespace GraveyardShift
+﻿using System;
+
+namespace GraveyardShift
 {
+    [Serializable]
     public class ZombieController : CreatureController
     {
         public ZombieController(Creature owner) : base(owner)

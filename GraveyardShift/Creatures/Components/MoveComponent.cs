@@ -4,6 +4,7 @@ namespace GraveyardShift
 {
     //=====================================================================
 
+    [Serializable]
     public class MoveComponent : ComponentsParts
     {
         Random rnd;
@@ -51,8 +52,8 @@ namespace GraveyardShift
 
         private void Move(int dx, int dy)
         {
-            if ( owner.manager.worldManager.IsOnCurrentGrid(owner.X_pos + dx, owner.Y_pos + dy))
-            {
+           // if ( owner.manager.worldManager.IsOnCurrentScreen(owner.X_pos + dx, owner.Y_pos + dy))
+           // {
                 if (!owner.manager.worldManager.LocationIsBlocked(owner.X_pos + dx, owner.Y_pos + dy))
                 {
                     if (!owner.manager.LocationIsOccupied(owner.X_pos + dx, owner.Y_pos + dy))
@@ -61,7 +62,7 @@ namespace GraveyardShift
                         owner.Y_pos += dy;
                     }
                 }
-            }
+         //   }
         }
 
        
@@ -72,6 +73,7 @@ namespace GraveyardShift
                 Position_Target_X = message.x_position;
                 Position_Target_Y = message.y_position;
             }
+
         }
 
        

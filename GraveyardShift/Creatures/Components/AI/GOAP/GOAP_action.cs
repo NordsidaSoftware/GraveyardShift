@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public abstract class GOAP_action
     {
         public string ID;
@@ -29,7 +30,7 @@ namespace GraveyardShift
         public abstract void Reset();
     }
 
-
+    [Serializable]
     public class GOAP_action_PATROL : GOAP_action
     {
         public GOAP_action_PATROL()
@@ -50,8 +51,8 @@ namespace GraveyardShift
         public override bool CheckProceduralPrecondition(Creature creature)
         {
             Random rnd = Randomizer.GetRandomizer();
-            int x_pos = rnd.Next(0, creature.manager.worldManager.WorldWidth);
-            int y_pos = rnd.Next(0, creature.manager.worldManager.WorldHeight);
+            int x_pos = rnd.Next(0, creature.manager.worldManager.MapWidth);
+            int y_pos = rnd.Next(0, creature.manager.worldManager.MapHeight);
 
             target = new Point(x_pos, y_pos);
             return true;

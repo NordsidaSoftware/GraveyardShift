@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public class EffectComponent : ComponentsParts
     {
         Random rnd;

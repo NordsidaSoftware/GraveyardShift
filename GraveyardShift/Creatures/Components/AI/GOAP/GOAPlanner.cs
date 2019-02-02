@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public class Node
     {
         public Node Parent { get; set; }
@@ -20,6 +21,7 @@ namespace GraveyardShift
         
     }
 
+    [Serializable]
     public class GOAPlanner
     {
         private FSM fsm;

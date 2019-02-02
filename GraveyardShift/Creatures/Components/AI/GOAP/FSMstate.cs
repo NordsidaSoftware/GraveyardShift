@@ -1,5 +1,8 @@
-﻿namespace GraveyardShift
+﻿using System;
+
+namespace GraveyardShift
 {
+    [Serializable]
     public abstract class FSMstate
     {
         public FSM fsm;

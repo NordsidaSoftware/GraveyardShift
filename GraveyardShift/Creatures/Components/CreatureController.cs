@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public abstract class CreatureController
     {
         public Random rnd;

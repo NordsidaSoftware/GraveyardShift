@@ -10,6 +10,7 @@ namespace GraveyardShift
         NONE,
         BLAST
     }
+    [Serializable]
     public abstract class Effect
     {
         public Creature owner;

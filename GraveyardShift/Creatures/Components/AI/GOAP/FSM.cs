@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace GraveyardShift
 {
+    [Serializable]
     public class FSM:ComponentsParts
     {
         public Stack<FSMstate> states;
@@ -51,6 +52,7 @@ namespace GraveyardShift
 
     }
 
+    [Serializable]
     internal class IdleState : FSMstate
     {
         public IdleState(FSM fsm) : base(fsm) {  }
@@ -78,6 +80,7 @@ namespace GraveyardShift
         }
     }
 
+    [Serializable]
     internal class PerformActionState : FSMstate
     {
         public PerformActionState(FSM fsm) : base(fsm)
@@ -126,6 +129,7 @@ namespace GraveyardShift
         }
     }
 
+    [Serializable]
     internal class MoveState : FSMstate
     {
         public MoveState(FSM fsm) : base(fsm)

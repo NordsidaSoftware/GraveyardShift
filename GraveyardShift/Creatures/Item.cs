@@ -1,5 +1,8 @@
-﻿namespace GraveyardShift
+﻿using System;
+
+namespace GraveyardShift
 {
+    [Serializable]
     public class Item
     {
         public string name;
