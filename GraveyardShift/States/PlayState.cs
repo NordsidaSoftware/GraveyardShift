@@ -34,6 +34,8 @@ namespace GraveyardShift
 
             if (root.input.wasKeyPressed(Keys.Enter)) { manager.PushState(new IngameMenu(manager, root, this)); }
 
+            if ( root.input.wasKeyPressed(Keys.Tab)) { world.drawOverWorld = !world.drawOverWorld; }
+
             world.Update();
             creatureManager.Update();
            

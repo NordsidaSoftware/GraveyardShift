@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -42,12 +43,60 @@ namespace GraveyardShift
 
                 counter++;
             }
+
+            /*
+
+            // Clamp height values to range 0 - 100 :
+            for (int x = 0; x < 50; x++)
+            {
+                for (int y = 0; y < 50; y++)
+                {
+                    Regions[x, y] =(byte) MathHelper.Clamp(Regions[x, y], 0, 100);
+                }
+            }
+
+    */
+         //  Smooth(3);
+
+            }
+        
+        private void Smooth(int iterations)
+        {
+            int iteration = 0;
+            while (iteration < iterations) 
+            {
+                iteration++;
+                for (int y = 1; y < 49; y++)
+                {
+                    for (int x = 1; x < 49; x++)
+                    {
+                        int over = GetNeighborValue(x, y - 1);
+                        int under = GetNeighborValue(x, y + 1);
+                        int left = GetNeighborValue(x - 1, y);
+                        int right = GetNeighborValue(x + 1, y);
+                        Regions[x, y] = (byte)((over + under + left + right) / 4);
+                    }
+                }
+            }
+
+
+            int GetNeighborValue(int x, int y)
+            {
+                int neighborHeight = Regions[x, y];
+                return neighborHeight;
+            }
+        }
+
+        internal int GetSeed(int x, int y)
+        {
+            return Seed * x * x + y;
         }
     }
 
+    
     public class Region
     {
-        int Seed;
+        public int Seed { get; set; }
         byte[,] Cells;
         public byte this[int x, int y] {  get { return Cells[x, y]; }  set { Cells[x, y] = value; } }
         public Region() { Cells = new byte[200, 200]; }

@@ -71,6 +71,7 @@ namespace GraveyardShift
 
                         X_pos += dx;
                         Y_pos += dy;
+
                     }
                     else
                     {                                              // movement is off map
@@ -86,6 +87,7 @@ namespace GraveyardShift
 
                     }         
 
+                        manager.worldManager.fov_Map.CalculateFOV(manager.worldManager.Region_Tile_Map, X_pos, Y_pos);
                 }
             }
              
@@ -93,6 +95,7 @@ namespace GraveyardShift
 
         internal override void Update()
         {
+            
             base.Update();
         }
     }
