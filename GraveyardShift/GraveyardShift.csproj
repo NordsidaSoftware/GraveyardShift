@@ -63,6 +63,7 @@
     <Compile Include="Creatures\Controllers\SoldierController.cs" />
     <Compile Include="Creatures\Player.cs" />
     <Compile Include="Creatures\WorldStates.cs" />
+    <Compile Include="Utils\Circle.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Creatures\Creature.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="States\StateManager.cs" />
     <Compile Include="States\WorldTestState.cs" />
     <Compile Include="Utils\Rectangle.cs" />
+    <Compile Include="World\ColorChart.cs" />
     <Compile Include="World\Overworld.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>

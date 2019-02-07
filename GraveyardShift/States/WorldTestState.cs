@@ -50,14 +50,21 @@ namespace GraveyardShift
 
             else
             {
-                drawCurrentRegion();
-                for (int x = 0; x < 50; x++)
+                Circle c = new Circle(new Point(25, 25), 10);
+
+                foreach ( Point p in c.circumference)
                 {
-                    for (int y = 0; y < 50; y++)
-                    {
-                        root.PutGlyphBackGround(Glyph.SPACE1, x, y, VAColor.White * currentRegion[x, y]);
-                    }
+                    root.PutGlyph(Glyph.AMPERSAND, p.X, p.Y);
                 }
+               // drawCurrentRegion();
+               // for (int x = 0; x < 50; x++)
+               // {
+               //     for (int y = 0; y < 50; y++)
+               //     {
+                        
+                       // root.PutGlyphBackGround(Glyph.SPACE1, x, y, VAColor.White * currentRegion[x, y]);
+               //     }
+               // }
             }
            
             base.Draw();

@@ -115,6 +115,8 @@ namespace GraveyardShift
     {
         Random rnd;
 
+        
+
         public int ScreenWidth, ScreenHeight;
        
         // ****************************************************************
@@ -175,6 +177,7 @@ namespace GraveyardShift
         private void GenerateCurrentRegionHeightmap()
         {
             Region_Heightmap = new Region();
+            rnd = new Random(Region_Heightmap.Seed);   // you need to move!!!
             Region_Heightmap.Seed = overWorld.GetSeed(RegionCoordinate.X, RegionCoordinate.Y);
 
             byte hNW = overWorld[RegionCoordinate.X - 1, RegionCoordinate.Y - 1];
@@ -257,23 +260,12 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < MapHeight; y++)
                 {
-                    Tile newLoc = new Tile();
-                    newLoc.glyph = Glyph.SPACE1;
-                    newLoc.fgColor = VAColor.WhiteSmoke;
-                    newLoc.blocked = false;
-                    newLoc.blockSight = false;
-
-                    // newLoc.bgColor = VAColor.Blend(topColor, bottomColor, (CurrentRegionHeightmap[x, y] / 256));
-
-                    // newLoc.bgColor = VAColor.White * CurrentRegionHeightmap[x, y];
-
                     if (Region_Heightmap[x, y] > 80) { basecolor = VAColor.Gray; }
                     else if (Region_Heightmap[x, y] > 30) { basecolor = VAColor.Green; }
                     else if (Region_Heightmap[x, y] > 10) { basecolor = VAColor.Yellow; }
                     else { basecolor = VAColor.Blue; }
 
-                    // newLoc.bgColor = VAColor.Blend(basecolor, newLoc.bgColor, 0.2f);
-                   // basecolor = basecolor * Region_Heightmap[x, y];
+                
                     Region_Background_Color_Map[x, y] = basecolor;
                 }
             }
@@ -281,7 +273,7 @@ namespace GraveyardShift
 
         private void GenerateTiles()
         {
-            Random rnd = new Random(Region_Heightmap.Seed);   // you need to move!!!
+            
 
             Region_Tile_Map = new Tile_Map();
             for ( int x = 0; x < 200; x++)
@@ -538,24 +530,7 @@ namespace GraveyardShift
 
         internal void Draw(VirtualConsole screen)
         {
-            /*
-            Map currentGrid = Maps[new Point(0, 0)];
-
-            int x_offset_into_mapgrid = Camera.X;
-            int y_offset_into_mapgrid = Camera.Y;
-
-            for (int x = 0; x < ScreenWidth; x++)
-            { 
-                for (int y = 0; y < ScreenHeight; y++)
-                { 
-                    screen.PutGlyphForeBack(currentGrid[x + x_offset_into_mapgrid, y+ y_offset_into_mapgrid].glyph,
-                        x, y, 
-                        currentGrid[x+ x_offset_into_mapgrid, y + y_offset_into_mapgrid].fgColor, 
-                        currentGrid[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid].bgColor);  
-                }
-                
-            }
-            */
+          
             if (drawOverWorld)
             {
                 for (int x = 0; x < 50; x++)
