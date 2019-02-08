@@ -44,7 +44,7 @@ namespace GraveyardShift
                 counter++;
             }
 
-            /*
+            
 
             // Clamp height values to range 0 - 100 :
             for (int x = 0; x < 50; x++)
@@ -55,8 +55,8 @@ namespace GraveyardShift
                 }
             }
 
-    */
-         //  Smooth(3);
+    
+          // Smooth(30);
 
             }
         

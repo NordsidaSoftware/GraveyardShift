@@ -72,8 +72,13 @@ namespace GraveyardShift
                 }
             }
 
-            int range = 10;
+            int range = 11;
             Point origin = new Point(originX, originY);
+
+            if ( origin.X - range < 0 ) { origin.X =  range; }
+            if ( origin.Y - range < 0 ) { origin.Y =  range; }
+            if ( origin.X + range >= cells.GetLength(0)) { origin.X = cells.GetLength(0) - range-2; }
+            if ( origin.Y + range >= cells.GetLength(1)) { origin.Y = cells.GetLength(1) - range-2; }
 
             int x_start = originX - range;
             int y_start = originY - range;
@@ -85,7 +90,8 @@ namespace GraveyardShift
             if (x_stop >= cells.GetLength(0)) x_stop = cells.GetLength(0) - 2;
             if (y_stop >= cells.GetLength(1)) y_stop = cells.GetLength(1) - 2;
 
-            Point[] targets = new Rectangle(x_start, y_start, x_stop - x_start, y_stop - y_start).Walls();
+            // Point[] targets = new Rectangle(x_start, y_start, x_stop - x_start, y_stop - y_start).Walls();
+            Point[] targets = new Circle(new Point(origin.X, origin.Y), range).circumference.ToArray();
 
             bool visible;
 
@@ -99,7 +105,8 @@ namespace GraveyardShift
                     if (N == 0) continue;
                     Point p = (Line.LerpPoint(origin, target, (float)step / N));
 
-                    if ( map[p.X, p.Y].blocked) { visible = false; }
+                    if ( map[p.X, p.Y].blockSight) { visible = false; }
+                     // HERE HEIGHT BLOCK  SIGHT !!
 
                     cells[p.X, p.Y] = visible;
                     visited[p.X, p.Y] = true;
@@ -161,7 +168,7 @@ namespace GraveyardShift
             GenerateLocalHeight(5);
             GenerateBackgroundColorFromRegionHeightmap();
             GenerateTiles();
-            //GenerateContourlinesOnMap();
+            GenerateContourlinesOnMap();
 
             visited_Map = new Bool_Map();
             fov_Map = new FOV_Map(visited_Map);
@@ -251,19 +258,30 @@ namespace GraveyardShift
         {
             Region_Background_Color_Map = new Color_Map();
 
-            // 1. Set background color of location based on height
-            VAColor topColor = VAColor.LightGreen;
-            VAColor bottomColor = VAColor.DarkGreen;
+         
             VAColor basecolor;
 
             for (int x = 0; x < MapWidth; x++)
             {
                 for (int y = 0; y < MapHeight; y++)
                 {
-                    if (Region_Heightmap[x, y] > 80) { basecolor = VAColor.Gray; }
-                    else if (Region_Heightmap[x, y] > 30) { basecolor = VAColor.Green; }
-                    else if (Region_Heightmap[x, y] > 10) { basecolor = VAColor.Yellow; }
-                    else { basecolor = VAColor.Blue; }
+                    if (Region_Heightmap[x, y] > 20) { basecolor = ColorChart.IntToColor[15]; }
+                    else if (Region_Heightmap[x, y] > 19) { basecolor = ColorChart.IntToColor[14]; }
+                    else if (Region_Heightmap[x, y] > 18) { basecolor = ColorChart.IntToColor[13]; }
+                    else if (Region_Heightmap[x, y] > 17) { basecolor = ColorChart.IntToColor[12]; }
+                    else if (Region_Heightmap[x, y] > 16) { basecolor = ColorChart.IntToColor[11]; }
+                    else if (Region_Heightmap[x, y] > 15) { basecolor = ColorChart.IntToColor[10]; }
+                    else if (Region_Heightmap[x, y] > 14) { basecolor = ColorChart.IntToColor[9]; }
+                    else if (Region_Heightmap[x, y] > 13) { basecolor = ColorChart.IntToColor[8]; }
+                    else if (Region_Heightmap[x, y] > 12) { basecolor = ColorChart.IntToColor[7]; }
+                    else if (Region_Heightmap[x, y] > 11) { basecolor = ColorChart.IntToColor[6]; }
+                    else if (Region_Heightmap[x, y] > 10) { basecolor = ColorChart.IntToColor[5]; }
+                    else if (Region_Heightmap[x, y] > 9) { basecolor = ColorChart.IntToColor[4]; }
+                    else if (Region_Heightmap[x, y] > 8) { basecolor = ColorChart.IntToColor[3]; }
+                    else if (Region_Heightmap[x, y] > 7) { basecolor = ColorChart.IntToColor[2]; }
+                    else if (Region_Heightmap[x, y] > 6) { basecolor = ColorChart.IntToColor[1]; }
+                    else if (Region_Heightmap[x, y] > 5) { basecolor = ColorChart.IntToColor[0]; }
+                    else { basecolor = VAColor.Pink; }
 
                 
                     Region_Background_Color_Map[x, y] = basecolor;
@@ -281,10 +299,10 @@ namespace GraveyardShift
                 for ( int y = 0; y < 200; y++ )
                 {
                     Region_Tile_Map[x, y] = new Tile() { glyph = Glyph.SPACE1, fgColor = VAColor.LightGreen};
-                    if (rnd.Next(100) > 97) { Region_Tile_Map[x, y] = new Tile()
+                    if (rnd.Next(100) > 98) { Region_Tile_Map[x, y] = new Tile()
                     {
-                        glyph = Glyph.UP_ARROW, fgColor = VAColor.LightGreen,
-                        blocked = true
+                        glyph = Glyph.CAPS_O, fgColor = VAColor.Brown,
+                        blocked = true, blockSight = true
                     }; }
                 }
             }
@@ -293,7 +311,8 @@ namespace GraveyardShift
 
         private void GenerateLocalHeight(int iterations)
         {
-            
+
+            /*
             int counter = 0;
             while (counter < iterations)
             {
@@ -314,19 +333,56 @@ namespace GraveyardShift
 
                 counter++;
             }
-            
+            */
 
-            
+            int counter = 0;
+            while (counter < iterations)
+            {
+                int radius = rnd.Next(3, 10);
+
+                Point origo = new Point(rnd.Next(radius + 2, MapWidth - radius - 2),
+                                           rnd.Next(radius + 2, MapHeight - radius - 2));
+                Circle c = new Circle(origo, radius);
+
+                foreach ( Point p in c.cells)
+                {
+                    Region_Heightmap[p.X, p.Y] += 5;
+                }
+
+                Circle s = new Circle(origo, radius - 2);
+                foreach (Point p in s.cells)
+                {
+                    Region_Heightmap[p.X, p.Y] += 5;
+                }
+
+                counter++;
+            }
+
+
+
+
+            for (int x = 0; x < MapWidth; x++)
+            {
+                for (int y = 0; y < MapHeight; y++)
+                {
+                    Region_Heightmap[x, y] = (byte)(Region_Heightmap[x, y] / 5);
+                }
+            }
+
+
+
+
+          /*
             for (int x = 1; x < MapWidth-1; x++)
             {
                 for (int y = 1; y < MapHeight-1; y++)
                 {
 
-                    Region_Heightmap[x, y] += (byte)rnd.Next(-10, 10);
+                    Region_Heightmap[x, y] += (byte)rnd.Next(-2, 2);
                 }
             }
             
-
+            
                     // 2. Smooth by neighbor values
                     int smoothtimer = 0;
             while (smoothtimer < 6 )  
@@ -343,11 +399,8 @@ namespace GraveyardShift
                         Region_Heightmap[x, y] = (byte)((over + under + left + right) / 4);
                     }
                 }
-
-              
-            
             }
-
+            
           
             
 
@@ -355,7 +408,8 @@ namespace GraveyardShift
             {
                 int neighborHeight = Region_Heightmap[x, y];
                 return neighborHeight;  
-            }          
+            }  
+            */
         }
 
         private void GenerateContourlinesOnMap()
@@ -424,7 +478,7 @@ namespace GraveyardShift
             GenerateLocalHeight(5);
             GenerateBackgroundColorFromRegionHeightmap();
             GenerateTiles();
-            //GenerateContourlinesOnMap();
+            GenerateContourlinesOnMap();
             visited_Map = new Bool_Map();
             fov_Map = new FOV_Map(visited_Map);
         }
@@ -567,7 +621,7 @@ namespace GraveyardShift
                             {
                                 screen.PutGlyphForeBack(Region_Tile_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid].glyph,
                                                             x, y,
-                                                            Region_Tile_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid].fgColor,
+                                                            Region_Tile_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid].fgColor * 0.5f,
                                                             Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid] * 0.5f);
                             }
                             else
