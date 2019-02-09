@@ -83,7 +83,8 @@
     <Compile Include="States\StateManager.cs" />
     <Compile Include="States\WorldTestState.cs" />
     <Compile Include="Utils\Rectangle.cs" />
-    <Compile Include="World\ColorChart.cs" />
+    <Compile Include="World\DataBase.cs" />
+    <Compile Include="World\FOV_Map.cs" />
     <Compile Include="World\Overworld.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>

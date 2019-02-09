@@ -87,7 +87,7 @@ namespace GraveyardShift
 
                     }         
 
-                        manager.worldManager.fov_Map.CalculateFOV(manager.worldManager.Region_Tile_Map, X_pos, Y_pos);
+                        manager.worldManager.fov_Map.CalculateFOV(manager.worldManager.Region_Features, manager.worldManager.Region_Heightmap, X_pos, Y_pos);
                 }
             }
              
