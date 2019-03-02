@@ -1,4 +1,6 @@
 ﻿using Microsoft.Xna.Framework.Input;
+using System;
+using System.Collections.Generic;
 using VAC;
 
 namespace GraveyardShift
@@ -13,6 +15,8 @@ namespace GraveyardShift
         MainMenuState main;
         WorldManager world;
         CreatureManager creatureManager;
+
+        Random rnd = Randomizer.GetRandomizer();
 
 
         public GenerateWorldState(StateManager manager, MainMenuState main, Virtual_root_Console root, int width, int height):base(manager, root)
@@ -38,10 +42,39 @@ namespace GraveyardShift
         {
             int MapWidth = 200;
             int MapHeight = 200;
+            int seed = 12345;//  rnd.Next();
 
-            world = new WorldManager(MapWidth, MapHeight, 2, 2, width, height);
-            creatureManager = new CreatureManager(world);
+            world = new WorldManager(MapWidth, MapHeight, width, height, seed);
 
+            Population population = new Population(world);
+           
+
+            creatureManager = new CreatureManager(world, population);
+            List<Creature> initialPopulation = population.GenerateInitialPopulation(creatureManager, seed);
+
+
+            // initial population into  a settlement
+            Point settlement = world.overWorld.GetNextSettlement();
+            if (settlement.X != -1)  // Not used pr. now...
+            {
+                foreach ( Creature c in initialPopulation )
+                {
+                    population.AddCreature(c, settlement);
+                }
+               
+            }
+            
+            // Time simulation here.
+            for ( int year = 0; year < 100; year++ )
+            {
+
+            }
+
+
+            //
+
+
+            // load world ( map ) and creatures into main
             main.world = world;
             main.creatureManager = creatureManager;
         }

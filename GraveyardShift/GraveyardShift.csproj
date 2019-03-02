@@ -62,6 +62,8 @@
     <Compile Include="Creatures\Item.cs" />
     <Compile Include="Creatures\Controllers\SoldierController.cs" />
     <Compile Include="Creatures\Player.cs" />
+    <Compile Include="States\OverWorldMenu.cs" />
+    <Compile Include="World\Population.cs" />
     <Compile Include="Creatures\WorldStates.cs" />
     <Compile Include="Utils\Circle.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />

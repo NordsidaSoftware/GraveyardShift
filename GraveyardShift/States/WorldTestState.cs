@@ -5,6 +5,7 @@ using VAC;
 namespace GraveyardShift
 {
     internal class WorldTestState : State
+        // Test state no longer used. Created an overworld for the first time...
     {
         private MainMenuState mainMenuState;
         private int screen_width;
@@ -31,7 +32,7 @@ namespace GraveyardShift
             int seed = 050776;
 
             overWorld = new Overworld(seed);
-            overWorld.Create(75);
+            overWorld.Create();
         }
 
         public override void Draw()

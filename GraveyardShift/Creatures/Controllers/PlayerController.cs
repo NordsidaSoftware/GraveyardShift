@@ -52,7 +52,7 @@ namespace GraveyardShift
             Owner.Name = "This is you";
             Owner.IsActive = true;
             Owner.glyph = (int)Glyph.FACE1;
-            Owner.color = VAColor.Red;
+            Owner.color = VAColor.Yellow;
             Owner.Faction = Faction.NEUTRAL;
             Owner.X_pos = 25;
             Owner.Y_pos = 25;

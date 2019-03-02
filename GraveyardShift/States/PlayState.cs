@@ -34,7 +34,7 @@ namespace GraveyardShift
 
             if (root.input.wasKeyPressed(Keys.Enter)) { manager.PushState(new IngameMenu(manager, root, this)); }
 
-            if ( root.input.wasKeyPressed(Keys.Tab)) { world.drawOverWorld = !world.drawOverWorld; }
+            if ( root.input.wasKeyPressed(Keys.Tab)) { manager.PushState(new OverWorldMenu(manager, root, this, world, creatureManager)); }
 
             world.Update();
             creatureManager.Update();
@@ -44,7 +44,6 @@ namespace GraveyardShift
 
         public override void Draw()
         {
-            root.Clear(screen, VAColor.DarkGreen);
             world.Draw(screen);
             creatureManager.Draw(screen);
 

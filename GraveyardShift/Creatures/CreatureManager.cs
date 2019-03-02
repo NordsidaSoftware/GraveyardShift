@@ -1,5 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using VAC;
 
@@ -10,10 +9,21 @@ namespace GraveyardShift
     {
         public List<Creature> creatures;
         public List<Effect> effects;
+
+        // ***********************  NEW STRUCTURE *******************
+        public Population worldPopulation;
+        public Creature[,] Region_Creature_Grid;
+        public List<Creature> RegionCreatures;
+        public Point CurrentRegion = new Point(20, 20);                     // TODO : Same as in worldManager...
+
         public WorldManager worldManager;
         public WorldStates worldStates;
 
-        public CreatureManager(WorldManager world)
+        public bool ResetUpdateLoop = false;            // Needed when player exits region. 
+
+     
+
+        public CreatureManager(WorldManager world, Population population)
         {
             Random rnd = Randomizer.GetRandomizer();
             creatures = new List<Creature>();
@@ -21,7 +31,13 @@ namespace GraveyardShift
             worldManager = world;
 
             worldStates = new WorldStates(world, creatures);
-            
+
+
+            worldPopulation = population;
+            SetRegion(0, 0);
+
+
+            /*
             for (int i = 0; i < 3; i++)
             {
                 Creature c = new Creature(this)
@@ -35,7 +51,7 @@ namespace GraveyardShift
                 c.controller.CreateBody();
                 creatures.Add(c);
             }
-
+            */
             //                 REMOVE CREAURE GENERATION HERE FOR A WHILE
             /*
             for (int i = 0; i < 3; i++)
@@ -82,13 +98,36 @@ namespace GraveyardShift
         }
 
     
-        public void AddCreature(Creature c)
+        public void SetRegion(int dx, int dy)
         {
-            creatures.Add(c);
+            CurrentRegion += new Point(dx, dy);
+
+            RegionCreatures = worldPopulation.GetPopulationInRegion(CurrentRegion);
         }
+
+        public void MoveToNewRegion(Creature c, int dx, int dy)
+        {
+            worldPopulation.MoveCreatureToRegion(c, CurrentRegion, new Point(CurrentRegion.X + dx, CurrentRegion.Y + dy));
+        }
+
+        public void AddCreature(Creature c, Point region)
+        {
+            //creatures.Add(c);
+            worldPopulation.AddCreature(c, region);
+        }
+
+       
 
         internal void Update()
         {
+           // foreach (Creature c in RegionCreatures) { c.Update(); }
+            for ( int index = RegionCreatures.Count-1; index >= 0; index-- )
+            {
+                if ( ResetUpdateLoop ) { ResetUpdateLoop = false;  break; }
+                RegionCreatures[index].Update();
+            }
+         
+            /*
             foreach (Creature c in creatures)
             {
                 if (c.IsActive)
@@ -108,25 +147,37 @@ namespace GraveyardShift
                 }
             }
 
+
+
             List<Creature> bufferlist = new List<Creature>();
             foreach ( Creature c in creatures)
             {
                 if ( c.IsActive) { bufferlist.Add(c); }
             }
             creatures = bufferlist;
-            
+    */        
         }
 
         internal void Draw(VirtualConsole map)
         {
 
-            foreach (Creature c in creatures)
+            //foreach (Creature c in creatures)
+            foreach (Creature c in RegionCreatures)
             {
-               
-                        map.PutGlyph(c.glyph,
-                        c.X_pos - worldManager.Camera.X,
-                        c.Y_pos - worldManager.Camera.Y,
-                        c.color);
+                if (worldManager.IsOnCurrentScreen(c.X_pos - worldManager.Camera.X, c.Y_pos - worldManager.Camera.Y))
+                {
+                    map.PutGlyph(c.glyph,
+                    c.X_pos - worldManager.Camera.X,
+                    c.Y_pos - worldManager.Camera.Y,
+                    c.color);
+
+                   /*                                Mirror reflection draw. Used over water ?
+                   map.PutGlyph(c.glyph,
+                   c.X_pos - worldManager.Camera.X+1,
+                   c.Y_pos - worldManager.Camera.Y+1,
+                   VAColor.DarkGray);
+                   */
+                }
                
             }
 

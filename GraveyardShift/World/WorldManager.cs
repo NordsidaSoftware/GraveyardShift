@@ -8,12 +8,13 @@ namespace GraveyardShift
 {
 
     //*********************************************************************************
-    //                                        THE OBJECT CLASS
-    //                                      called 'thing' for now
+    //                                        THE FEATURE CLASS
+    //                                      called 'feature' for now
+    //                                      all terrain features e.g tree, rock etc
     //*********************************************************************************
 
     [Serializable]
-    public struct Thing
+    public struct Feature
     {
         public int glyph;
         public int fgColor;
@@ -21,17 +22,6 @@ namespace GraveyardShift
         public bool blockSight;
     }
 
-    [Serializable]
-    public class Map
-    {
-        // reimplement this class as an array ? Mod to get line/row etc
-
-        public Thing this[int x, int y] { get { return tiles[x, y]; } set { tiles[x, y] = value; } }
-        public Thing[,] tiles;
-       
-
-        public Map() { tiles = new Thing[200, 200]; }
-    }
 
     public class Color_Map // TODO use byte instead of VAColor...
     {
@@ -67,8 +57,7 @@ namespace GraveyardShift
         public bool this[int x, int y] { get { return cells[x, y]; } set { cells[x, y] = value; } }
         private bool[,] cells;
 
-        public Bool_Map() { cells = new bool[200, 200]; }
-    
+        public Bool_Map() { cells = new bool[200, 200]; }    
     }
 
     
@@ -76,8 +65,6 @@ namespace GraveyardShift
     public class WorldManager
     {
         Random rnd;
-
-        
 
         public int ScreenWidth, ScreenHeight;
        
@@ -99,9 +86,9 @@ namespace GraveyardShift
 
         public bool drawOverWorld; // TEMP hack
 
-        public WorldManager(int width, int height, int width_parts, int height_parts, int screenWidth, int screenHeight)
+        public WorldManager(int width, int height,int screenWidth, int screenHeight, int seed)
         {
-            rnd = new Random();
+           
             this.MapWidth = width;
             this.MapHeight = height;
            
@@ -109,15 +96,18 @@ namespace GraveyardShift
             this.ScreenHeight = screenHeight;
 
 
-                                   //**************************************
-                                   //|         NEW SUFF                   |
-                                   //**************************************
+            //**************************************
+            //|         NEW SUFF                   |
+            //**************************************
 
-            int seed = 050776;                           //    Seed to generate all.Hardcoded for now...
+            
             overWorld = new Overworld(seed);             //    Master overworld 50 x 50 bytes
-            overWorld.Create(75);                        //    Creates overworld. Iterations is number of hills !
+            overWorld.Create();                          //    Creates overworld.
+            
+
             Camera = new Point(0, 0);                    //    Viewport origin. Size like screen
             RegionCoordinate = new Point(20, 20);        //    Current Region 
+            
 
             GenerateCurrentRegionHeightmap();
             GenerateLocalHeight(5);
@@ -220,23 +210,23 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < MapHeight; y++)
                 {
-                    if (Region_Heightmap[x, y] > 20) { basecolor = DB.ByteToColor[(int)DB.Palette.White]; }
-                    else if (Region_Heightmap[x, y] > 19) { basecolor = DB.ByteToColor[(int)DB.Palette.Hilite_Gray]; }
-                    else if (Region_Heightmap[x, y] > 18) { basecolor = DB.ByteToColor[(int)DB.Palette.Light_Gray]; }
-                    else if (Region_Heightmap[x, y] > 17) { basecolor = DB.ByteToColor[(int)DB.Palette.Dark_Gray]; }
-                    else if (Region_Heightmap[x, y] > 16) { basecolor = DB.ByteToColor[(int)DB.Palette.Darkest_Gray]; }
-                    else if (Region_Heightmap[x, y] > 15) { basecolor = DB.ByteToColor[(int)DB.Palette.Hilite_Green]; }
-                    else if (Region_Heightmap[x, y] > 14) { basecolor = DB.ByteToColor[(int)DB.Palette.Darkest_Green]; }
-                    else if (Region_Heightmap[x, y] > 13) { basecolor = DB.ByteToColor[(int)DB.Palette.Green]; }
-                    else if (Region_Heightmap[x, y] > 12) { basecolor = DB.ByteToColor[(int)DB.Palette.Light_Green]; }
-                    else if (Region_Heightmap[x, y] > 11) { basecolor = DB.ByteToColor[(int)DB.Palette.Dark_Yellow]; }
-                    else if (Region_Heightmap[x, y] > 10){ basecolor = DB.ByteToColor[(int)DB.Palette.Light_Yellow]; }
-                    else if (Region_Heightmap[x, y] > 9) { basecolor = DB.ByteToColor[(int)DB.Palette.Hilite_Blue]; }
-                    else if (Region_Heightmap[x, y] > 8) { basecolor = DB.ByteToColor[(int)DB.Palette.Light_Blue]; }
-                    else if (Region_Heightmap[x, y] > 7) { basecolor = DB.ByteToColor[(int)DB.Palette.Blue]; }
-                    else if (Region_Heightmap[x, y] > 6) { basecolor = DB.ByteToColor[(int)DB.Palette.Dark_Blue]; }
-                    else if (Region_Heightmap[x, y] > 5) { basecolor = DB.ByteToColor[(int)DB.Palette.Darkest_Blue]; }
-                    else { basecolor = basecolor = DB.ByteToColor[(int)DB.Palette.Black]; }
+                    if (Region_Heightmap[x, y] > 20) { basecolor = DB.HightToColor[(int)DB.Palette.White]; }
+                    else if (Region_Heightmap[x, y] > 19) { basecolor = DB.HightToColor[(int)DB.Palette.Hilite_Gray]; }
+                    else if (Region_Heightmap[x, y] > 18) { basecolor = DB.HightToColor[(int)DB.Palette.Light_Gray]; }
+                    else if (Region_Heightmap[x, y] > 17) { basecolor = DB.HightToColor[(int)DB.Palette.Dark_Gray]; }
+                    else if (Region_Heightmap[x, y] > 16) { basecolor = DB.HightToColor[(int)DB.Palette.Darkest_Gray]; }
+                    else if (Region_Heightmap[x, y] > 15) { basecolor = DB.HightToColor[(int)DB.Palette.Hilite_Green]; }
+                    else if (Region_Heightmap[x, y] > 14) { basecolor = DB.HightToColor[(int)DB.Palette.Darkest_Green]; }
+                    else if (Region_Heightmap[x, y] > 13) { basecolor = DB.HightToColor[(int)DB.Palette.Green]; }
+                    else if (Region_Heightmap[x, y] > 12) { basecolor = DB.HightToColor[(int)DB.Palette.Light_Green]; }
+                    else if (Region_Heightmap[x, y] > 11) { basecolor = DB.HightToColor[(int)DB.Palette.Dark_Yellow]; }
+                    else if (Region_Heightmap[x, y] > 10){ basecolor = DB.HightToColor[(int)DB.Palette.Light_Yellow]; }
+                    else if (Region_Heightmap[x, y] > 9) { basecolor = DB.HightToColor[(int)DB.Palette.Hilite_Blue]; }
+                    else if (Region_Heightmap[x, y] > 8) { basecolor = DB.HightToColor[(int)DB.Palette.Light_Blue]; }
+                    else if (Region_Heightmap[x, y] > 7) { basecolor = DB.HightToColor[(int)DB.Palette.Blue]; }
+                    else if (Region_Heightmap[x, y] > 6) { basecolor = DB.HightToColor[(int)DB.Palette.Dark_Blue]; }
+                    else if (Region_Heightmap[x, y] > 5) { basecolor = DB.HightToColor[(int)DB.Palette.Darkest_Blue]; }
+                    else { basecolor = basecolor = DB.HightToColor[(int)DB.Palette.Black]; }
 
                 
                     Region_Background_Color_Map[x, y] = basecolor;
@@ -532,9 +522,6 @@ namespace GraveyardShift
         
       
 
-
-       
-
         internal void Update()
         {
             
@@ -568,9 +555,9 @@ namespace GraveyardShift
                     {
                         int feature = Region_Features[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid];
 
-                        Thing thing = DB.IntToItem[feature];
+                        Feature thing = DB.IntToItem[feature];
                         Glyph glyph =(Glyph) thing.glyph;
-                        VAColor fg = DB.ByteToColor[(byte)thing.fgColor];
+                        VAColor fg = DB.HightToColor[(byte)thing.fgColor];
                         //           BACKGROUND 
                         //         ******************** IN FOV ********************
                         if (fov_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])

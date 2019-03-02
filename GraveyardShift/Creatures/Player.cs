@@ -83,6 +83,10 @@ namespace GraveyardShift
 
                         manager.worldManager.SetCameraAt(X_pos - manager.worldManager.ScreenWidth / 2,
                                                          Y_pos - manager.worldManager.ScreenHeight / 2);
+
+                        manager.MoveToNewRegion(this, dx, dy);
+                        manager.SetRegion(dx, dy);
+                        manager.ResetUpdateLoop = true;
                         
 
                     }         
