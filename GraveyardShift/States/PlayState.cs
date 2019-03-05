@@ -32,7 +32,7 @@ namespace GraveyardShift
         {
             if (root.input.wasKeyPressed(Keys.Escape)) {  manager.PopState(); }
 
-            if (root.input.wasKeyPressed(Keys.Enter)) { manager.PushState(new IngameMenu(manager, root, this)); }
+          //  if (root.input.wasKeyPressed(Keys.Enter)) { manager.PushState(new IngameMenu(manager, root, this)); }
 
             if ( root.input.wasKeyPressed(Keys.Tab)) { manager.PushState(new OverWorldMenu(manager, root, this, world, creatureManager)); }
 

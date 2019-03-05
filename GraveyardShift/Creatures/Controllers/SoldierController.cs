@@ -33,6 +33,8 @@ namespace GraveyardShift
 
             Actions.Add(new GOAP_action_PATROL());
             Goals.Add("patrol", true);
+            Actions.Add(new GOAP_action_SLEEP());
+            Goals.Add("rested", true);
         }
 
         internal override void CreateBody()

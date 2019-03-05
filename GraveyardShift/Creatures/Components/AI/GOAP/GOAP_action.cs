@@ -43,9 +43,11 @@ namespace GraveyardShift
 
             Preconditions = new Dictionary<string, object>();
             Preconditions.Add("isMobile", true);
+            Preconditions.Add("rested", true);
 
             Effects = new Dictionary<string, object>();
             Effects.Add("patrol", true);
+            Effects.Add("rested", false);
         }
 
         public override bool CheckProceduralPrecondition(Creature creature)
@@ -67,8 +69,65 @@ namespace GraveyardShift
         public override bool Perform(Creature creature)
         {
             Turns++;
-            if ( Turns > TurnsToComplete) { Console.WriteLine("Finished Patroling in area"); Finished = true; }
+            if ( Turns > TurnsToComplete) { Console.WriteLine("Finished Patroling in area"); Finished = true; creature.body.isRested = false; }
             Console.WriteLine(creature.Name + "Patroling in area " + creature.X_pos.ToString() + "," + creature.Y_pos.ToString());
+            return true;
+        }
+
+        public override bool RequiresInRange()
+        {
+            return true;
+        }
+
+        public override void Reset()
+        {
+            Finished = false;
+            Turns = 0;
+        }
+
+        internal override bool IsDone()
+        {
+            return Finished;
+        }
+    }
+
+    [Serializable]
+    public class GOAP_action_SLEEP : GOAP_action
+    {
+        public GOAP_action_SLEEP()
+        {
+            ID = "SLEEP";
+            Cost = 1;
+            Turns = 0;
+            TurnsToComplete = 20;
+            Finished = false;
+
+            Preconditions = new Dictionary<string, object>();
+            Preconditions.Add("rested", false);
+
+            Effects = new Dictionary<string, object>();
+            Effects.Add("rested", true);
+        }
+
+        public override bool CheckProceduralPrecondition(Creature creature)
+        {
+            target = creature.manager.worldManager.GetCreatureBed(creature);
+            if (target.X != 0)
+                 return true;
+            else return false;
+        }
+
+        public override bool InRange(Creature creature)
+        {
+            if (creature.X_pos == target.X && creature.Y_pos == target.Y) { return true; }
+            return false;
+        }
+
+        public override bool Perform(Creature creature)
+        {
+            Turns++;
+            if (Turns > TurnsToComplete) { Console.WriteLine("Finished Sleeping"); Finished = true; creature.body.isRested = true; }
+            Console.WriteLine(creature.Name + "Sleeping " + creature.X_pos.ToString() + "," + creature.Y_pos.ToString());
             return true;
         }
 

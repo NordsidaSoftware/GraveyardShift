@@ -172,12 +172,14 @@ namespace GraveyardShift
         public override void OnExit()
         {
             consoles.Clear();
+            root.Flush();
             base.OnExit();
         }
 
         public override void Update()
         {
             if ( root.input.wasKeyPressed(Keys.Tab)) { manager.PopState(); }
+            if (root.input.wasKeyPressed(Keys.Enter)) { manager.PushState(new IngameMenu(manager, root, playState)); }
 
             if ( root.input.wasKeyPressed(Keys.M)) { SwitchMapDisplayMode(); }
             if ( root.input.wasKeyPressed(Keys.N)) { SwitchOverlayMode(); }

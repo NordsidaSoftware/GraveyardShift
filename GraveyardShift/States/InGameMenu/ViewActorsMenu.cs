@@ -1,9 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Input;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VAC;
 
 namespace GraveyardShift
@@ -11,18 +7,26 @@ namespace GraveyardShift
     public class ViewActorsMenu : State
     {
         int hilite;
+        List<Creature> regionCreatures;
         VirtualConsole menu;
+     
         IngameMenu ingameMenu;
         public ViewActorsMenu(StateManager manager, Virtual_root_Console root, IngameMenu ingameMenu) : base(manager, root)
         {
             this.ingameMenu = ingameMenu;
+            regionCreatures = new List<Creature>();
+            
+
             menu = new VirtualConsole(30, 20);
             menu.X_Offset = 10;
             consoles.Add(menu);
+
+           
+
             root.Print(menu, 1, 1, "Creatures");
             root.Print(menu, 1, 2, "---------");
 
-            hilite = ingameMenu.playState.creatureManager.creatures.Count - 1; /// ?
+            hilite = regionCreatures.Count;
 
 
         }
@@ -30,7 +34,7 @@ namespace GraveyardShift
         public override void Draw()
         {
             int line = 0;
-            foreach (Creature c in ingameMenu.playState.creatureManager.creatures)
+            foreach (Creature c in regionCreatures)
             {
                 if ( line == hilite) { root.SetForegroundColor(menu, VAColor.Red); }
                 else { root.SetForegroundColor(menu, VAColor.NavajoWhite); }
@@ -55,7 +59,7 @@ namespace GraveyardShift
             if (root.input.wasKeyPressed(Keys.Down))
             {
                 hilite++;
-                if (hilite > ingameMenu.playState.creatureManager.creatures.Count-1)
+                if (hilite > regionCreatures.Count-1)
                 {
                     hilite = 0;
                 }
@@ -65,7 +69,7 @@ namespace GraveyardShift
                 hilite--;
                 if (hilite < 0)
                 {
-                    hilite = ingameMenu.playState.creatureManager.creatures.Count-1 ;
+                    hilite = regionCreatures.Count-1 ;
                 }
 
 
@@ -74,9 +78,9 @@ namespace GraveyardShift
 
         private Creature GetSelectedCreature()
         {
-            if ( ingameMenu.playState.creatureManager.creatures.Count >= hilite )
+            if ( regionCreatures.Count >= hilite )
             {
-                return ingameMenu.playState.creatureManager.creatures[hilite];
+                return regionCreatures[hilite];
             }
 
             return null;
@@ -89,7 +93,7 @@ namespace GraveyardShift
 
         public override void OnEnter()
         {
-            
+            regionCreatures = ingameMenu.playState.creatureManager.RegionCreatures;
         }
     }
 }

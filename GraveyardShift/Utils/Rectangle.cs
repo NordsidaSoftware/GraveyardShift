@@ -37,7 +37,7 @@ namespace GraveyardShift
                 y1 <= other.y2 && y2 >= other.y1);
         }
 
-        public Point[] Walls()
+        public Point[] OuterWalls()
         {
             List<Point> points = new List<Point>();
             for (int x = x1 - 1; x < x2 + 1; x++)
@@ -52,5 +52,22 @@ namespace GraveyardShift
             }
             return points.ToArray();
         }
+
+        public Point[] Walls()
+        {
+            List<Point> points = new List<Point>();
+            for (int x = x1; x < x2 ; x++)
+            {
+                points.Add(new Point(x, y1 ));
+                points.Add(new Point(x, y2));
+            }
+            for (int y = y1; y < y2; y++)
+            {
+                points.Add(new Point(x1, y));
+                points.Add(new Point(x2, y));
+            }
+            return points.ToArray();
+        }
+
     }
 }

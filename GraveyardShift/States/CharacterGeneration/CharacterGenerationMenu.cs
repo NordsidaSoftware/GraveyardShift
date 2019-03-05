@@ -12,7 +12,7 @@ namespace GraveyardShift
             consoles.Add(screen);
             root.Print(screen, 5, 10, "You are a randomly generated test person...");
             Player player = new Player(creatureManager, root);
-            creatureManager.AddCreature(player, new Point(20, 20));
+            creatureManager.AddCreature(player, new Point(33, 10));       // WATCH THIS  !!!
         }
 
         public override void Draw()

@@ -62,9 +62,10 @@ namespace GraveyardShift
                 return plan;  // returning empty plan...
             }
 
-            ProcessTree();
+            plan = ProcessTree(planningTreeLeaves, plan);
 
-            plan.Enqueue(planningTreeLeaves[0].Action);
+            // plan.Enqueue(planningTreeLeaves[0].Action);
+
             return plan;
         }
 
@@ -153,9 +154,15 @@ namespace GraveyardShift
             return allMatch;
         }
 
-        private void ProcessTree()
+        private Queue<GOAP_action> ProcessTree(List<Node> planningTreeLeaves, Queue<GOAP_action> plan)
         {
-           
+            // not implementet yet. Process tree to choose the plan witch satisfies the most goals at lowest cost
+            // for now, choose a random plan that satisfies at least one goal
+            // need to reverse tree first !!
+            Random rnd = Randomizer.GetRandomizer();
+            Node randomLeafPlan = planningTreeLeaves[rnd.Next(plan.Count)];
+            while (randomLeafPlan != null ) { plan.Enqueue(randomLeafPlan.Action); randomLeafPlan = randomLeafPlan.Parent; }
+            return plan;
         }
 
        

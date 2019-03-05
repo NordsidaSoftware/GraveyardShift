@@ -104,11 +104,11 @@ namespace GraveyardShift
             overWorld = new Overworld(seed);             //    Master overworld 50 x 50 bytes
             overWorld.Create();                          //    Creates overworld.
             
+            // following code to generate region that player starts in 
 
             Camera = new Point(0, 0);                    //    Viewport origin. Size like screen
-            RegionCoordinate = new Point(20, 20);        //    Current Region 
-            
-
+            RegionCoordinate = new Point(33, 10);        //    Current Region 
+           
             GenerateCurrentRegionHeightmap();
             GenerateLocalHeight(5);
             GenerateBackgroundColorFromRegionHeightmap();
@@ -116,10 +116,22 @@ namespace GraveyardShift
             GenerateContourlinesOnMap();
 
             visited_Map = new Bool_Map();
-            fov_Map = new FOV_Map(visited_Map);
-           
+            fov_Map = new FOV_Map(visited_Map);  
 
             drawOverWorld = false;                       // TEMP hack
+        }
+
+        internal Point GetCreatureBed(Creature creature)  // HACK : Need a lot more...
+        {
+            Point p = new Point();
+            for ( int x = 0; x < MapWidth; x++ )
+            {
+                for ( int y = 0; y < MapHeight; y++ )
+                {
+                    if (Region_Features[x,y] == (int)DB.Features.WALL ) { p = new Point(x-10, y-10); }
+                }
+            }
+            return p;
         }
 
         //*******************************************************************
@@ -236,9 +248,9 @@ namespace GraveyardShift
 
         private void GenerateTiles()
         {
-            
             Region_Features = new Features_Map();
 
+            // Test code that generates a circle of forest
             for (int i = 0; i < 5; i++)
             {
                 int centerX = rnd.Next(20, MapWidth - 20);
@@ -252,8 +264,41 @@ namespace GraveyardShift
                     Region_Features[p.X, p.Y] = (int)DB.Features.TREE;
                 }
             }
+            // If currentRegion contains a settlement. Create the house(s):  // for now only one house...
+            if ( overWorld.settlements.Contains(RegionCoordinate))
+            {
+                CreateHouse();
+               
+            }
+
+
         }
 
+        private void CreateHouse()
+        {
+            // Random generation of house size
+            int x = rnd.Next(20, MapWidth - 20);
+            int y = rnd.Next(20, MapHeight - 20);
+            int w = rnd.Next(5, 15);
+            int h = rnd.Next(5, 15);
+            Rectangle house = new Rectangle(x, y, w, h);
+
+            // Create the walls
+            for (int Hor_Wall = house.Left; Hor_Wall <= house.Right; Hor_Wall++)
+            {
+                Region_Features[Hor_Wall, house.Top] = (int)DB.Features.WALL;
+                Region_Features[Hor_Wall, house.Bottom] = (int)DB.Features.WALL;
+            }
+            for (int Vert_Wall = house.Top; Vert_Wall < house.Bottom; Vert_Wall++)
+            {
+                Region_Features[house.Left, Vert_Wall] = (int)DB.Features.WALL;
+                Region_Features[house.Right, Vert_Wall] = (int)DB.Features.WALL;
+            }
+
+            // Create a door into the house
+            Point door = house.Walls()[rnd.Next(house.Walls().Length)];
+            Region_Features[door.X, door.Y] = (int)DB.Features.DOOR;
+        }
 
         private void GenerateLocalHeight(int iterations)
         {

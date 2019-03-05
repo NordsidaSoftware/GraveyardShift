@@ -18,7 +18,7 @@ namespace GraveyardShift
             menu = new VirtualConsole(20, 10);
             root.Print(menu, 0, 1, "Ingame menu");
             root.Print(menu, 0, 2, "------------");
-            root.Print(menu, 0, 3, " A - View units");
+            root.Print(menu, 0, 3, "A:Region Units");
             consoles.Add(menu);
         }
 
@@ -40,7 +40,7 @@ namespace GraveyardShift
 
         public override void OnEnter()
         {
-            
+            root.Flush();
         }
     }
 }

@@ -271,7 +271,8 @@ namespace GraveyardShift
             }
 
             settlements.Add(p);
-            settlementScore[p.X, p.Y] = 0;            // score set to 0. Preve
+            settlementScore[p.X, p.Y] = 0;            // score set to 0. Prevents same settlement selected
+
             return p;
         }
 

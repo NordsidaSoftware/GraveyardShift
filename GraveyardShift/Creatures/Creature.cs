@@ -62,6 +62,9 @@ namespace GraveyardShift
     public class Body
     {
         public Dictionary<string, BodyPart> bodyparts;
+        internal bool isRested = true;
+
+        public bool IsRested { get { return isRested; } set { isRested = value; } }
 
         public bool IsAlive
         {
@@ -210,6 +213,7 @@ namespace GraveyardShift
                 States.Add(KVP.Key, KVP.Value);
             }
             States.Add("isMobile", body.CanMove);                                   // Ex. of creature 'local' state
+            States.Add("rested", body.isRested);
             return States;
         }
     }

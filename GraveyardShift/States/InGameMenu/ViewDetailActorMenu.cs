@@ -13,15 +13,21 @@ namespace GraveyardShift
         Creature creature;
         VirtualConsole menu;
         VirtualConsole details;
+        VirtualConsole goap;
         public ViewDetailActorMenu(StateManager manager, Virtual_root_Console root, Creature creature) : base(manager, root)
         {
             this.creature = creature;
             menu = new VirtualConsole(60, 60);
             details = new VirtualConsole(60, 30);
+            goap = new VirtualConsole(60, 30);
             details.X_Offset = menu.screen_width;
+            goap.Y_Offset = 30;
+
             root.SetBackgroundColor(details, VAColor.DarkGreen);
+            root.SetForegroundColor(goap, VAColor.Yellow);
             consoles.Add(menu);
             consoles.Add(details);
+            consoles.Add(goap);
         }
 
         public override void Draw()
@@ -58,7 +64,11 @@ namespace GraveyardShift
             root.Print(details, 1, details_line, "IsAlive : " + creature.body.IsAlive.ToString()); details_line += 2;
             root.Print(details, 1, details_line, "CanMove : " + creature.body.CanMove.ToString()); details_line += 2;
             root.Print(details, 1, details_line, "Faction : " + creature.Faction.ToString()); details_line += 2;
-           
+
+
+            int goap_line = 1;
+            root.Print(goap, 1, goap_line, "Planner:"); goap_line += 2;
+          
 
             base.Draw();
         }

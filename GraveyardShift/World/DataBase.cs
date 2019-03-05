@@ -185,13 +185,19 @@ namespace GraveyardShift
         };
 
 
-        public enum Features { SPACE = 0, TREE = 1 }
+        public enum Features {
+            SPACE = 0,
+            TREE = 1,
+            WALL = 2,
+            DOOR = 3
+        }
 
         public static Dictionary<int, Feature> IntToItem = new Dictionary<int, Feature>()
         {
             {0, new Feature() {glyph = (int)Glyph.SPACE1, blocked = false, blockSight = false } },
-            {1, new Feature() {glyph = (int)Glyph.SUN, blocked = false, blockSight = true, fgColor = (int)Palette.Darkest_Green } }
-
+            {1, new Feature() {glyph = (int)Glyph.SUN, blocked = false, blockSight = true, fgColor = (int)Palette.Darkest_Green } },
+            {2, new Feature() {glyph = (int)Glyph.STAR,blocked = true, blockSight = true, fgColor = (int)Palette.Gray  } },
+            {3, new Feature() {glyph = (int)Glyph.BAR,blocked = false, blockSight = true, fgColor = (int)Palette.Gray  } }
         };
     }
 }

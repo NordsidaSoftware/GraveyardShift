@@ -48,7 +48,6 @@ namespace GraveyardShift
 
             Population population = new Population(world);
            
-
             creatureManager = new CreatureManager(world, population);
             List<Creature> initialPopulation = population.GenerateInitialPopulation(creatureManager, seed);
 

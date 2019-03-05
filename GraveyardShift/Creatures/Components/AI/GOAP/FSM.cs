@@ -139,16 +139,21 @@ namespace GraveyardShift
         public override void OnEnter()
         {
             Console.WriteLine(fsm.owner.Name + " On Enter Move State");
+            List<Point> path = fsm.owner.manager.CalculatePathTo(fsm.currentPlan.Peek().target);
+
         }
 
         public override void OnExit()
         {
             Console.WriteLine(fsm.owner.Name + " On Exit Move State");
+            // clean path here ?
         }
 
         public override void Update()
         {
-            if ( fsm.currentPlan.Peek().InRange(fsm.owner)) { fsm.PopState();  return; }
+            if ( fsm.currentPlan.Peek().InRange(fsm.owner)) { fsm.PopState();  return; } // in range. Stop moving
+
+            // still not in range. 
             fsm.owner.Distribute(new CPMessage()
             {
                 type = CPMessageType.TARGET,

@@ -20,7 +20,6 @@ namespace GraveyardShift
         }
         public Dictionary<string, object> GetWorldStates()
         {
-
             return worldStates;
         }
 
