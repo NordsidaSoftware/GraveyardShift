@@ -40,7 +40,7 @@ namespace GraveyardShift
                 case ZombieStates.Wander:
                     {
                         bool isCloseToEnemy = false;
-                        foreach (Creature c in owner.manager.creatures)
+                        foreach (Creature c in owner.manager.RegionCreatures)
                         {
                             if (c != owner && c.Faction != owner.Faction)  // do not detect yourself or friends
                             {

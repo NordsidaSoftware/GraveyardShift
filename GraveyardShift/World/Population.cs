@@ -21,7 +21,7 @@ namespace GraveyardShift
             rnd = new Random(seed);
             List<Creature> initialPopulation = new List<Creature>();
 
-            for (int number_of_initial_persons = 0; number_of_initial_persons < 6; number_of_initial_persons++)
+            for (int number_of_initial_persons = 0; number_of_initial_persons < 2; number_of_initial_persons++)
             {
                 Creature c = new Creature(creatureManager)
                 {
@@ -36,28 +36,7 @@ namespace GraveyardShift
             }
 
             return initialPopulation;
-            /*
-            for (int x = 0; x < 50; x++)       // overworld x tiles
-            {
-                for (int y = 0; y < 50; y++)   // overworld y tiles
-                {
-                    if (world.Region_Heightmap[x, y] > 5 && world.Region_Heightmap[x, y] < 10)
-                    {
-                      
-                            Creature c = new Creature(creatureManager)
-                            {
-                                Name = "GOAP agent",
-                                X_pos = 25,
-                                Y_pos = 25
-                            };
-                            c.controller = new SoldierController(c);
-                            c.controller.Initialize();
-                            c.controller.CreateBody();
-                            AddCreature(c, new Point(x, y));
-                    }
-                }
-            }
-            */
+           
         }
 
         private void CreateRegionPopulationLists()

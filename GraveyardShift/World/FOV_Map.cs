@@ -1,6 +1,4 @@
-﻿//using Microsoft.Xna.Framework;
-
-namespace GraveyardShift
+﻿namespace GraveyardShift
 {
     public class FOV_Map
     {
@@ -28,17 +26,6 @@ namespace GraveyardShift
             if ( origin.X + range >= cells.GetLength(0)) { origin.X = cells.GetLength(0) - range-2; }
             if ( origin.Y + range >= cells.GetLength(1)) { origin.Y = cells.GetLength(1) - range-2; }
 
-          //  int x_start = originX - range;
-          //  int y_start = originY - range;
-          //  int x_stop = originX + range;
-          //  int y_stop = originY + range;
-
-          //  if (x_start < 2) x_start = 2;
-          //  if (y_start < 2) y_start = 2;
-          //  if (x_stop >= cells.GetLength(0)) x_stop = cells.GetLength(0) - 2;
-          //  if (y_stop >= cells.GetLength(1)) y_stop = cells.GetLength(1) - 2;
-
-            // Point[] targets = new Rectangle(x_start, y_start, x_stop - x_start, y_stop - y_start).Walls();
             Point[] targets = new Circle(new Point(origin.X, origin.Y), range).cells.ToArray();        // TODO :need circumference without artefacts..
 
             bool visible;

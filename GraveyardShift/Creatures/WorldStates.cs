@@ -7,14 +7,13 @@ namespace GraveyardShift
     public class WorldStates
     {
         private WorldManager world;
-        private List<Creature> creatures;
 
         public Dictionary<string, object> worldStates;
 
-        public WorldStates(WorldManager world, List<Creature> creatures)
+        public WorldStates(WorldManager world)
         {
             this.world = world;
-            this.creatures = creatures;
+            
             worldStates = new Dictionary<string, object>();
             worldStates.Add("day", true);                         // Ex. of 'global' world state for GOAP planner
         }

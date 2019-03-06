@@ -23,6 +23,7 @@ namespace GraveyardShift
     }
 
 
+    
     public class Color_Map // TODO use byte instead of VAColor...
     {
         public VAColor this[int x, int y] { get { return colors[x, y]; } set { colors[x, y] = value; } }
@@ -30,17 +31,17 @@ namespace GraveyardShift
 
         public Color_Map() { colors = new VAColor[200, 200]; }
     }
-
+    
 
     public class Features_Map
     {
         public int this[int x, int y] { get { return things[x, y]; } set { things[x, y] = value; } }
         private int[,] things;
 
-        public Features_Map () { things = new int[200, 200]; }
-        
+        public Features_Map() { things = new int[200, 200]; }
 
-        public bool Blocked (int x, int y )
+
+        public bool Blocked(int x, int y)
         {
             return DB.IntToItem[things[x, y]].blocked;
         }
@@ -57,17 +58,17 @@ namespace GraveyardShift
         public bool this[int x, int y] { get { return cells[x, y]; } set { cells[x, y] = value; } }
         private bool[,] cells;
 
-        public Bool_Map() { cells = new bool[200, 200]; }    
+        public Bool_Map() { cells = new bool[200, 200]; }
     }
 
-    
+
     [Serializable]
     public class WorldManager
     {
         Random rnd;
 
         public int ScreenWidth, ScreenHeight;
-       
+
         // ****************************************************************
         //|      NEW WORLD STRUCTURE                                      |
         //*****************************************************************
@@ -86,29 +87,23 @@ namespace GraveyardShift
 
         public bool drawOverWorld; // TEMP hack
 
-        public WorldManager(int width, int height,int screenWidth, int screenHeight, int seed)
+        public WorldManager(int width, int height, int screenWidth, int screenHeight, int seed)
         {
-           
+
             this.MapWidth = width;
             this.MapHeight = height;
-           
+
             this.ScreenWidth = screenWidth;
             this.ScreenHeight = screenHeight;
 
-
-            //**************************************
-            //|         NEW SUFF                   |
-            //**************************************
-
-            
             overWorld = new Overworld(seed);             //    Master overworld 50 x 50 bytes
             overWorld.Create();                          //    Creates overworld.
-            
+
             // following code to generate region that player starts in 
 
             Camera = new Point(0, 0);                    //    Viewport origin. Size like screen
             RegionCoordinate = new Point(33, 10);        //    Current Region 
-           
+
             GenerateCurrentRegionHeightmap();
             GenerateLocalHeight(5);
             GenerateBackgroundColorFromRegionHeightmap();
@@ -116,19 +111,19 @@ namespace GraveyardShift
             GenerateContourlinesOnMap();
 
             visited_Map = new Bool_Map();
-            fov_Map = new FOV_Map(visited_Map);  
+            fov_Map = new FOV_Map(visited_Map);
 
             drawOverWorld = false;                       // TEMP hack
         }
 
         internal Point GetCreatureBed(Creature creature)  // HACK : Need a lot more...
         {
-            Point p = new Point();
-            for ( int x = 0; x < MapWidth; x++ )
+            Point p = new Point(0, 0);
+            for (int x = 0; x < MapWidth; x++)
             {
-                for ( int y = 0; y < MapHeight; y++ )
+                for (int y = 0; y < MapHeight; y++)
                 {
-                    if (Region_Features[x,y] == (int)DB.Features.WALL ) { p = new Point(x-10, y-10); }
+                    if (Region_Features[x, y] == (int)DB.Features.WALL) { p = new Point(x - 10, y - 10); }
                 }
             }
             return p;
@@ -161,26 +156,26 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < 100; y++)
                 {
-                    byte hTop = (byte)InterpolateLine((hNW+hN)/2.0f, hN, x/100.0f );
-                    byte hBottom = (byte)InterpolateLine((hW+h)/2.0f, h, x/100.0f );
+                    byte hTop = (byte)InterpolateLine((hNW + hN) / 2.0f, hN, x / 100.0f);
+                    byte hBottom = (byte)InterpolateLine((hW + h) / 2.0f, h, x / 100.0f);
 
-                    byte cellHeight = (byte)InterpolateLine((hTop+hBottom)/2.0f, hBottom, y/100.0f );
+                    byte cellHeight = (byte)InterpolateLine((hTop + hBottom) / 2.0f, hBottom, y / 100.0f);
 
                     Region_Heightmap[x, y] = cellHeight;
                 }
             }
 
             // 2. NE QUADRANT
-            
+
             for (int x = 0; x < 100; x++)
             {
                 for (int y = 0; y < 100; y++)
                 {
-                    byte hTop = (byte)InterpolateLine(hN, (hNE+hN)/2.0f, x / 100.0f);
-                    byte hBottom = (byte)InterpolateLine(h, (hE+h)/2.0f, x / 100.0f);
+                    byte hTop = (byte)InterpolateLine(hN, (hNE + hN) / 2.0f, x / 100.0f);
+                    byte hBottom = (byte)InterpolateLine(h, (hE + h) / 2.0f, x / 100.0f);
 
-                    byte cellHeight = (byte)InterpolateLine((hTop+hBottom)/2.0f, hBottom, y / 100.0f);
-                    Region_Heightmap[x+100 , y] = cellHeight;
+                    byte cellHeight = (byte)InterpolateLine((hTop + hBottom) / 2.0f, hBottom, y / 100.0f);
+                    Region_Heightmap[x + 100, y] = cellHeight;
                 }
             }
 
@@ -189,11 +184,11 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < 100; y++)
                 {
-                    byte hTop = (byte)InterpolateLine(h, (hE+h)/2.0f, x / 100.0f);
-                    byte hBottom = (byte)InterpolateLine(hS, (hSE+hS)/2.0f, x / 100.0f);
+                    byte hTop = (byte)InterpolateLine(h, (hE + h) / 2.0f, x / 100.0f);
+                    byte hBottom = (byte)InterpolateLine(hS, (hSE + hS) / 2.0f, x / 100.0f);
 
-                    byte cellHeight = (byte)InterpolateLine(hTop, (hBottom+hTop)/2.0f, y/100.0f);
-                    Region_Heightmap[x+100, y+100] = cellHeight;
+                    byte cellHeight = (byte)InterpolateLine(hTop, (hBottom + hTop) / 2.0f, y / 100.0f);
+                    Region_Heightmap[x + 100, y + 100] = cellHeight;
                 }
             }
 
@@ -202,11 +197,11 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < 100; y++)
                 {
-                    byte hTop = (byte)InterpolateLine((hW+h)/2.0f, h, x/100.0f);
-                    byte hBottom = (byte)InterpolateLine((hSW+hS)/2.0f, hS, x/100.0f);
+                    byte hTop = (byte)InterpolateLine((hW + h) / 2.0f, h, x / 100.0f);
+                    byte hBottom = (byte)InterpolateLine((hSW + hS) / 2.0f, hS, x / 100.0f);
 
-                    byte cellHeight = (byte)InterpolateLine(hTop, (hBottom+hTop)/2.0f, y /100.0f);
-                    Region_Heightmap[x, y+100] = cellHeight;
+                    byte cellHeight = (byte)InterpolateLine(hTop, (hBottom + hTop) / 2.0f, y / 100.0f);
+                    Region_Heightmap[x, y + 100] = cellHeight;
                 }
             }
         }
@@ -215,33 +210,11 @@ namespace GraveyardShift
         {
             Region_Background_Color_Map = new Color_Map();
 
-         
-            VAColor basecolor;
-
             for (int x = 0; x < MapWidth; x++)
             {
                 for (int y = 0; y < MapHeight; y++)
                 {
-                    if (Region_Heightmap[x, y] > 20) { basecolor = DB.HightToColor[(int)DB.Palette.White]; }
-                    else if (Region_Heightmap[x, y] > 19) { basecolor = DB.HightToColor[(int)DB.Palette.Hilite_Gray]; }
-                    else if (Region_Heightmap[x, y] > 18) { basecolor = DB.HightToColor[(int)DB.Palette.Light_Gray]; }
-                    else if (Region_Heightmap[x, y] > 17) { basecolor = DB.HightToColor[(int)DB.Palette.Dark_Gray]; }
-                    else if (Region_Heightmap[x, y] > 16) { basecolor = DB.HightToColor[(int)DB.Palette.Darkest_Gray]; }
-                    else if (Region_Heightmap[x, y] > 15) { basecolor = DB.HightToColor[(int)DB.Palette.Hilite_Green]; }
-                    else if (Region_Heightmap[x, y] > 14) { basecolor = DB.HightToColor[(int)DB.Palette.Darkest_Green]; }
-                    else if (Region_Heightmap[x, y] > 13) { basecolor = DB.HightToColor[(int)DB.Palette.Green]; }
-                    else if (Region_Heightmap[x, y] > 12) { basecolor = DB.HightToColor[(int)DB.Palette.Light_Green]; }
-                    else if (Region_Heightmap[x, y] > 11) { basecolor = DB.HightToColor[(int)DB.Palette.Dark_Yellow]; }
-                    else if (Region_Heightmap[x, y] > 10){ basecolor = DB.HightToColor[(int)DB.Palette.Light_Yellow]; }
-                    else if (Region_Heightmap[x, y] > 9) { basecolor = DB.HightToColor[(int)DB.Palette.Hilite_Blue]; }
-                    else if (Region_Heightmap[x, y] > 8) { basecolor = DB.HightToColor[(int)DB.Palette.Light_Blue]; }
-                    else if (Region_Heightmap[x, y] > 7) { basecolor = DB.HightToColor[(int)DB.Palette.Blue]; }
-                    else if (Region_Heightmap[x, y] > 6) { basecolor = DB.HightToColor[(int)DB.Palette.Dark_Blue]; }
-                    else if (Region_Heightmap[x, y] > 5) { basecolor = DB.HightToColor[(int)DB.Palette.Darkest_Blue]; }
-                    else { basecolor = basecolor = DB.HightToColor[(int)DB.Palette.Black]; }
-
-                
-                    Region_Background_Color_Map[x, y] = basecolor;
+                    Region_Background_Color_Map[x, y] = DB.HightToColor[Region_Heightmap[x, y]];
                 }
             }
         }
@@ -265,13 +238,11 @@ namespace GraveyardShift
                 }
             }
             // If currentRegion contains a settlement. Create the house(s):  // for now only one house...
-            if ( overWorld.settlements.Contains(RegionCoordinate))
+            if (overWorld.settlements.Contains(RegionCoordinate))
             {
                 CreateHouse();
-               
+
             }
-
-
         }
 
         private void CreateHouse()
@@ -302,30 +273,6 @@ namespace GraveyardShift
 
         private void GenerateLocalHeight(int iterations)
         {
-
-            /*
-            int counter = 0;
-            while (counter < iterations)
-            {
-                int radius = rnd.Next(10, 30);
-                int xh = rnd.Next(40, 160);            // NB NEED SEED VALUE FROM OVERWORLD!!
-                int yh = rnd.Next(40, 160);
-
-
-                for (int x = 0; x < MapWidth; x++)
-                {
-                    for (int y = 0; y < MapHeight; y++)
-                    {
-                        int height = radius * radius - ((x - xh) * (x - xh)) - ((y - yh) * (y - yh));
-                        if (height > 0)
-                            Region_Heightmap[x, y] += (byte)height;
-                    }
-                }
-
-                counter++;
-            }
-            */
-
             int counter = 0;
             while (counter < iterations)
             {
@@ -335,7 +282,7 @@ namespace GraveyardShift
                                            rnd.Next(radius + 2, MapHeight - radius - 2));
                 Circle c = new Circle(origo, radius);
 
-                foreach ( Point p in c.cells)
+                foreach (Point p in c.cells)
                 {
                     Region_Heightmap[p.X, p.Y] += 5;
                 }
@@ -350,8 +297,6 @@ namespace GraveyardShift
             }
 
 
-
-
             for (int x = 0; x < MapWidth; x++)
             {
                 for (int y = 0; y < MapHeight; y++)
@@ -359,48 +304,6 @@ namespace GraveyardShift
                     Region_Heightmap[x, y] = (byte)(Region_Heightmap[x, y] / 5);
                 }
             }
-
-
-
-
-          /*
-            for (int x = 1; x < MapWidth-1; x++)
-            {
-                for (int y = 1; y < MapHeight-1; y++)
-                {
-
-                    Region_Heightmap[x, y] += (byte)rnd.Next(-2, 2);
-                }
-            }
-            
-            
-                    // 2. Smooth by neighbor values
-                    int smoothtimer = 0;
-            while (smoothtimer < 6 )  
-            {
-                smoothtimer++;
-                for (int y = 1; y < MapHeight-1; y++)
-                {
-                    for (int x = 1; x < MapWidth-1; x++)
-                    {
-                        int over = GetNeighborValue(x, y - 1);
-                        int under = GetNeighborValue(x, y + 1);
-                        int left = GetNeighborValue(x - 1, y);
-                        int right = GetNeighborValue(x + 1, y);
-                        Region_Heightmap[x, y] = (byte)((over + under + left + right) / 4);
-                    }
-                }
-            }
-            
-          
-            
-
-            int GetNeighborValue(int x, int y)
-            {
-                int neighborHeight = Region_Heightmap[x, y];
-                return neighborHeight;  
-            }  
-            */
         }
 
         private void GenerateContourlinesOnMap()
@@ -436,8 +339,8 @@ namespace GraveyardShift
                         {
                             VAColor color = Region_Background_Color_Map[x + 1, y + 1];
                             color *= 0.5f;
-                           // l.fgColor = VAColor.SandyBrown;             // Need glyphmap here
-                           // l.glyph = Glyph.BACK_SLASH;
+                            // l.fgColor = VAColor.SandyBrown;             // Need glyphmap here
+                            // l.glyph = Glyph.BACK_SLASH;
                             Region_Background_Color_Map[x + 1, y + 1] = color;
                         }
                     }
@@ -457,13 +360,13 @@ namespace GraveyardShift
 
         private float InterpolateLine(float valueA, float valueB, float x)
         {
-            return (valueA + (valueB - valueA) * ( x ) );
+            return (valueA + (valueB - valueA) * (x));
         }
 
         internal void EnterNewRegion(int dx, int dy)
         {
             RegionCoordinate += new Point(dx, dy);
-            
+
 
             GenerateCurrentRegionHeightmap();
             GenerateLocalHeight(5);
@@ -474,15 +377,13 @@ namespace GraveyardShift
             fov_Map = new FOV_Map(visited_Map);
         }
 
-       
+
 
         internal void MoveCamera(int dx, int dy)
         {
-           
-
-            if (Camera.X + dx >= 0 && Camera.X + dx  + ScreenWidth < MapWidth )
+            if (Camera.X + dx >= 0 && Camera.X + dx + ScreenWidth < MapWidth)
             {
-                if (Camera.Y + dy >= 0 && Camera.Y + dy + ScreenHeight < MapHeight )
+                if (Camera.Y + dy >= 0 && Camera.Y + dy + ScreenHeight < MapHeight)
                 {
                     Camera += new Point(dx, dy);
                 }
@@ -491,19 +392,16 @@ namespace GraveyardShift
 
         internal void SetCameraAt(int x, int y)
         {
-            if  ( x < 0 ) { x = 0; }
-            if ( y < 0 ) { y = 0; }
-            if ( y > MapHeight - ScreenHeight) { y = MapHeight-ScreenHeight; }
-            if ( x > MapWidth -ScreenWidth) { x = MapWidth -ScreenWidth ; }
+            if (x < 0) { x = 0; }
+            if (y < 0) { y = 0; }
+            if (y > MapHeight - ScreenHeight) { y = MapHeight - ScreenHeight; }
+            if (x > MapWidth - ScreenWidth) { x = MapWidth - ScreenWidth; }
             Camera = new Point(x, y);
-
         }
 
         internal bool LocationIsBlocked(int x, int y)
         {
-
             return Region_Features.Blocked(x, y);
-           
         }
 
 
@@ -519,33 +417,54 @@ namespace GraveyardShift
             return false;
         }
 
-        /*
-        public bool IsOnCamera(Creature c)
-        {
-            Rectangle camera = new Rectangle(Camera.X * ScreenWidth,
-                                             Camera.Y * ScreenHeight,
-                                             ScreenWidth, ScreenHeight);
-            if (camera.Contains(new Microsoft.Xna.Framework.Point(c.X_pos, c.Y_pos)))
-            {
-                return true;
-            }
-            return false;
-        }
-        */
 
-        /*
-        internal bool IsOnCamera(int v1, int v2)
+
+        /*                      =========== P A T H  F I N D I N G ==========
+         * 
+         * 
+         * 
+         * */
+        internal Stack<Point> CalculateRegionPathTo(Point origin, Point target)
         {
-            Rectangle camera = new Rectangle(Camera.X * ScreenWidth,
-                                              Camera.Y * ScreenHeight,
-                                              ScreenWidth, ScreenHeight);
-            if (camera.Contains(new Microsoft.Xna.Framework.Point(v1, v2)))
+            Queue<Point> Frontier = new Queue<Point>();
+            List<Point> Visited = new List<Point>();
+            Dictionary<Point, Point> CameFrom = new Dictionary<Point, Point>();
+
+            Visited.Add(origin);
+            Frontier.Enqueue(origin);
+            CameFrom[origin] = new Point(-1, -1);
+            Stack<Point> path = new Stack<Point>();
+
+            while (Frontier.Count > 0)
             {
-                return true;
+                Point current = Frontier.Dequeue();
+                if (current.X == target.X && current.Y == target.Y) { break; }
+                foreach (Point p in current.Neighbors())
+                {
+                    if (IsOnMap(p.X, p.Y) && !Region_Features.Blocked(p.X, p.Y))
+                    {
+                        if (!Visited.Contains(p))
+                        {
+                            Frontier.Enqueue(p);
+                            Visited.Add(p);
+                            CameFrom[p] = current;
+                        }
+                    }
+                }
+
             }
-            return false;
+           Point step = target;
+            while (true)
+            {
+                path.Push(step);
+                step = CameFrom[step];
+                if (step.X == origin.X && step.Y == origin.Y) { path.Push(step); break; }
+            }
+            path.TrimExcess();
+
+            return path;
         }
-        */
+
 
         public bool IsInRegion(Creature c)
         {
@@ -555,90 +474,67 @@ namespace GraveyardShift
 
         internal bool IsOnMap(int v1, int v2)
         {
-            if ( v1 > 0 && v1 < MapWidth-1 )
+            if (v1 > 0 && v1 < MapWidth - 1)
             {
-                if ( v2 > 0 && v2 < MapHeight-1 )
+                if (v2 > 0 && v2 < MapHeight - 1)
                 {
                     return true;
                 }
             }
             return false;
         }
-        
-      
+
+
 
         internal void Update()
         {
-            
+
         }
 
         internal void Draw(VirtualConsole screen)
         {
-          
-            if (drawOverWorld)
-            {
-                for (int x = 0; x < 50; x++)
-                {
-                    for (int y = 0; y < 50; y++)
-                    {
-                        screen.PutGlyphBackGround(Glyph.SPACE1, x, y, VAColor.White * overWorld[x, y]);
+            int x_offset_into_mapgrid = Camera.X;
+            int y_offset_into_mapgrid = Camera.Y;
 
-                        if ( x == RegionCoordinate.X && y == RegionCoordinate.Y)
-                        {
-                            screen.PutGlyphBackGround(Glyph.CAPS_X, x, y, VAColor.Yellow);
-                        }
+            for (int x = 0; x < ScreenWidth; x++)
+            {
+                for (int y = 0; y < ScreenHeight; y++)
+                {
+                    int feature = Region_Features[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid];
+
+                    Feature thing = DB.IntToItem[feature];
+                    Glyph glyph = (Glyph)thing.glyph;
+                    VAColor fg = DB.HightToColor[(byte)thing.fgColor];
+
+                    //           BACKGROUND 
+                    //         ******************** IN FOV ********************
+
+                    if (fov_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])
+                    {
+                        screen.PutGlyphForeBack( glyph, x, y, fg,
+                        Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid]);
+
+
                     }
-                }
-            }
-            else
-            {
-                int x_offset_into_mapgrid = Camera.X;
-                int y_offset_into_mapgrid = Camera.Y;
-                for (int x = 0; x < ScreenWidth; x++)
-                {
-                    for (int y = 0; y < ScreenHeight; y++)
+                    else
                     {
-                        int feature = Region_Features[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid];
+                        //                     BACKGROUND
+                        //     ********************  OUTSIDE OF FOV BUT REMEMBERED *******************
 
-                        Feature thing = DB.IntToItem[feature];
-                        Glyph glyph =(Glyph) thing.glyph;
-                        VAColor fg = DB.HightToColor[(byte)thing.fgColor];
-                        //           BACKGROUND 
-                        //         ******************** IN FOV ********************
-                        if (fov_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])
+                        if (visited_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])
                         {
-                            screen.PutGlyphForeBack(
-                                glyph,
-                                 x, y,
-                                fg,
-                            Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid]);
-
-                           
+                            screen.PutGlyphForeBack ( glyph, x, y, fg * 0.9f,
+                              Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid] * 0.9f);
                         }
                         else
                         {
-                            //                     BACKGROUND
-                            //     ********************  OUTSIDE OF FOV BUT REMEMBERED *******************
-                            if (visited_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])
-                            {
-                                screen.PutGlyphForeBack(
-                                 glyph,
-                                  x, y,
-                                  fg * 0.9f,
-                                  Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid] * 0.9f);
-                            }
-                            else
-                            {
-                                //  ********************** NOT VISIBLE *************************
-                                screen.PutGlyphBackGround(Glyph.SPACE1, x, y, VAColor.Black);
-                            }
+                            //  ********************** NOT VISIBLE *************************
+                            screen.PutGlyphBackGround(Glyph.SPACE1, x, y, VAColor.Black);
                         }
                     }
                 }
-
             }
         }
-
     }
-        
+
 }

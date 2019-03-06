@@ -132,21 +132,24 @@ namespace GraveyardShift
     [Serializable]
     internal class MoveState : FSMstate
     {
+        Stack<Point> path;
+        Point nextStep;
         public MoveState(FSM fsm) : base(fsm)
         {
+            path = new Stack<Point>();
         }
 
         public override void OnEnter()
         {
             Console.WriteLine(fsm.owner.Name + " On Enter Move State");
-            List<Point> path = fsm.owner.manager.CalculatePathTo(fsm.currentPlan.Peek().target);
+            path = fsm.owner.manager.worldManager.CalculateRegionPathTo(new Point(fsm.owner.X_pos, fsm.owner.Y_pos), fsm.currentPlan.Peek().target);
 
         }
 
         public override void OnExit()
         {
             Console.WriteLine(fsm.owner.Name + " On Exit Move State");
-            // clean path here ?
+            path.Clear();
         }
 
         public override void Update()
@@ -154,11 +157,15 @@ namespace GraveyardShift
             if ( fsm.currentPlan.Peek().InRange(fsm.owner)) { fsm.PopState();  return; } // in range. Stop moving
 
             // still not in range. 
+            if ( path.Count > 0)
+                nextStep = path.Pop();     // need a check for error / trouble here...
             fsm.owner.Distribute(new CPMessage()
             {
                 type = CPMessageType.TARGET,
-                x_position = fsm.currentPlan.Peek().target.X,
-                y_position = fsm.currentPlan.Peek().target.Y
+                x_position = nextStep.X,
+                y_position = nextStep.Y
+               // x_position = fsm.currentPlan.Peek().target.X,
+               // y_position = fsm.currentPlan.Peek().target.Y
             });
         }
     }

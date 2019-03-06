@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraveyardShift
 {
@@ -21,6 +18,18 @@ namespace GraveyardShift
         public static Point operator -(Point A, Point B)
         {
             return new Point(A.X - B.X, A.Y - B.Y);
+
+        }
+
+        private static Point[] NeighborPoints = new Point[4] { new Point(-1, 0), new Point(1, 0), new Point(0, 1), new Point(1, 1) };
+
+        internal IEnumerable<Point> Neighbors()
+        {
+            foreach (Point d in NeighborPoints)
+            {
+                Point next = new Point(X + d.X, Y + d.Y);
+                yield return next;
+            }
         }
     }
 }

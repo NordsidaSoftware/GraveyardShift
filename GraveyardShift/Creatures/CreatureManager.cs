@@ -15,11 +15,9 @@ namespace GraveyardShift
     [Serializable]
     public  class CreatureManager
     {
-        public List<Creature> creatures;
         public List<Effect> effects;
 
         public Population worldPopulation;
-       // public Creature[,] Region_Creature_Grid;
         public List<Creature> RegionCreatures;
         public Point CurrentRegion;
 
@@ -33,21 +31,16 @@ namespace GraveyardShift
         public CreatureManager(WorldManager world, Population population)
         {
             Random rnd = Randomizer.GetRandomizer();
-            creatures = new List<Creature>();
             effects = new List<Effect>();
             worldManager = world;
             CurrentRegion = world.RegionCoordinate;
-            worldStates = new WorldStates(world, creatures);
+            worldStates = new WorldStates(world);
 
 
             worldPopulation = population;
-            SetRegion(0, 0);
-
-
-          
+            SetRegion(0, 0);          
         }
 
-    
         public void SetRegion(int dx, int dy)
         {
             CurrentRegion += new Point(dx, dy);
@@ -65,15 +58,10 @@ namespace GraveyardShift
             worldPopulation.AddCreature(c, region);
         }
 
-        internal List<Point> CalculatePathTo(Point target)
-        {
-            throw new NotImplementedException();
-        }
-
         internal bool LocationIsOccupied(int x, int y)
         {
             bool blocked = false;
-            foreach ( Creature c in creatures)
+            foreach ( Creature c in RegionCreatures)
             {
                 if ( c.X_pos == x && c.Y_pos == y) { blocked = true; }
             }
@@ -83,7 +71,7 @@ namespace GraveyardShift
         internal Creature GetCreatureAtLocation(Point current)
         {
             Creature returnCreature = null;
-            foreach (Creature c in creatures)
+            foreach (Creature c in RegionCreatures)
             {
                 if (c.X_pos == current.X && c.Y_pos == current.Y) { returnCreature = c; }
             }
@@ -102,14 +90,10 @@ namespace GraveyardShift
                 if ( ResetUpdateLoop ) { ResetUpdateLoop = false;  break; }
                 RegionCreatures[index].Update();
             }
-         
-          
         }
 
         internal void Draw(VirtualConsole map)
         {
-
-            //foreach (Creature c in creatures)
             foreach (Creature c in RegionCreatures)
             {
                 if (worldManager.IsOnCurrentScreen(c.X_pos - worldManager.Camera.X, c.Y_pos - worldManager.Camera.Y))
@@ -125,13 +109,8 @@ namespace GraveyardShift
                    c.Y_pos - worldManager.Camera.Y+1,
                    VAColor.DarkGray);
                    */
-                }
-               
+                }  
             }
-
         }
-
-      
-
     }
 }

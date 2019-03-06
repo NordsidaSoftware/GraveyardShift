@@ -21,7 +21,7 @@ namespace GraveyardShift
 
             if ( message.type == CPMessageType.MELEE_ATTACK)
             {
-                foreach ( Creature creature in owner.manager.creatures)
+                foreach ( Creature creature in owner.manager.RegionCreatures)
                 {
                     if ( creature.X_pos == message.x_position && creature.Y_pos == message.y_position && creature != owner)
                     {
@@ -46,7 +46,7 @@ namespace GraveyardShift
 
             if (message.type == CPMessageType.RANGED_ATTACK)
             {
-                foreach (Creature creature in owner.manager.creatures)
+                foreach (Creature creature in owner.manager.RegionCreatures)
                 {
                     if (creature.X_pos == message.x_position && creature.Y_pos == message.y_position && creature != owner)
                     {

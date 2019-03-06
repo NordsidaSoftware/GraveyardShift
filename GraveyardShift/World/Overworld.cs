@@ -257,7 +257,7 @@ namespace GraveyardShift
         public Point GetNextSettlement()
         {
             int hiscore = 0;
-            Point p = new Point();
+            Point p = new Point(0,0);
             for (int x = 0; x < 50; x++)
             {
                 for (int y = 0; y < 50; y++)
