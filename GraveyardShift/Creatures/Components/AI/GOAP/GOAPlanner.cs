@@ -64,7 +64,7 @@ namespace GraveyardShift
 
             plan = ProcessTree(planningTreeLeaves, plan);
 
-            // plan.Enqueue(planningTreeLeaves[0].Action);
+            plan.Enqueue(planningTreeLeaves[0].Action);
 
             return plan;
         }
@@ -160,8 +160,10 @@ namespace GraveyardShift
             // for now, choose a random plan that satisfies at least one goal
             // need to reverse tree first !!
             Random rnd = Randomizer.GetRandomizer();
+
             Node randomLeafPlan = planningTreeLeaves[rnd.Next(plan.Count)];
-            while (randomLeafPlan != null ) { plan.Enqueue(randomLeafPlan.Action); randomLeafPlan = randomLeafPlan.Parent; }
+
+            while (randomLeafPlan.Parent != null ) { plan.Enqueue(randomLeafPlan.Action); randomLeafPlan = randomLeafPlan.Parent; }
             return plan;
         }
 

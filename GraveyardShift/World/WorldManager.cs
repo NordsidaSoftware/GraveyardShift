@@ -424,41 +424,48 @@ namespace GraveyardShift
          * 
          * 
          * */
-        internal Stack<Point> CalculateRegionPathTo(Point origin, Point target)
+
+        static public double Heuristic (Point a, Point b)
         {
-            Queue<Point> Frontier = new Queue<Point>();
-            List<Point> Visited = new List<Point>();
+            return Math.Abs(a.X - b.X) + Math.Abs(a.Y - b.Y);
+        }
+
+        internal Stack<Point> GreedyBestFirstSearch(Point origin, Point target)
+        {
+            Stack<Point> path = new Stack<Point>();
+            PriorityQueue<Point> Frontier = new PriorityQueue<Point>();
             Dictionary<Point, Point> CameFrom = new Dictionary<Point, Point>();
 
-            Visited.Add(origin);
-            Frontier.Enqueue(origin);
-            CameFrom[origin] = new Point(-1, -1);
-            Stack<Point> path = new Stack<Point>();
+            Frontier.Enqueue(origin, 0);
+            CameFrom[origin] = origin;
 
             while (Frontier.Count > 0)
             {
                 Point current = Frontier.Dequeue();
-                if (current.X == target.X && current.Y == target.Y) { break; }
+
+                if (current.X == target.X && current.Y == target.Y) { break; } // Early exit here.
+
                 foreach (Point p in current.Neighbors())
                 {
                     if (IsOnMap(p.X, p.Y) && !Region_Features.Blocked(p.X, p.Y))
                     {
-                        if (!Visited.Contains(p))
-                        {
-                            Frontier.Enqueue(p);
-                            Visited.Add(p);
+                        if (!CameFrom.ContainsKey(p))
+                        { 
+                            double priority = Heuristic(target, p);
+                            Frontier.Enqueue(p, priority);
                             CameFrom[p] = current;
                         }
                     }
                 }
-
             }
+
            Point step = target;
+        
             while (true)
             {
                 path.Push(step);
-                step = CameFrom[step];
-                if (step.X == origin.X && step.Y == origin.Y) { path.Push(step); break; }
+                step = CameFrom[step]; // ERROR here. Target still not in camefrom list...
+                if (step.X == origin.X && step.Y == origin.Y) { break; }
             }
             path.TrimExcess();
 

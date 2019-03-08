@@ -142,7 +142,7 @@ namespace GraveyardShift
         public override void OnEnter()
         {
             Console.WriteLine(fsm.owner.Name + " On Enter Move State");
-            path = fsm.owner.manager.worldManager.CalculateRegionPathTo(new Point(fsm.owner.X_pos, fsm.owner.Y_pos), fsm.currentPlan.Peek().target);
+            path = fsm.owner.manager.worldManager.GreedyBestFirstSearch(new Point(fsm.owner.X_pos, fsm.owner.Y_pos), fsm.currentPlan.Peek().target);
 
         }
 
@@ -154,7 +154,7 @@ namespace GraveyardShift
 
         public override void Update()
         {
-            if ( fsm.currentPlan.Peek().InRange(fsm.owner)) { fsm.PopState();  return; } // in range. Stop moving
+            if ( fsm.currentPlan.Peek().InRange(fsm.owner)) { fsm.PopState(); path.Clear(); return; } // in range. Stop moving
 
             // still not in range. 
             if ( path.Count > 0)

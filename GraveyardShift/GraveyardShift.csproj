@@ -63,6 +63,7 @@
     <Compile Include="Creatures\Controllers\SoldierController.cs" />
     <Compile Include="Creatures\Player.cs" />
     <Compile Include="States\OverWorldMenu.cs" />
+    <Compile Include="Utils\PriorityQueue.cs" />
     <Compile Include="World\Population.cs" />
     <Compile Include="Creatures\WorldStates.cs" />
     <Compile Include="Utils\Circle.cs" />
