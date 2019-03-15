@@ -115,12 +115,16 @@ namespace GraveyardShift
 
         public override bool CheckProceduralPrecondition(Creature creature)
         {
+            Item sleepItem = creature.GetItem("bed");
+            if ( sleepItem != null ) { target = sleepItem.Position; return true; }
+            else { return false; }
+
             /*
             target = creature.manager.worldManager.GetCreatureBed(creature);
             if (target.X != 0)
                  return true;
             else return false;
-            */
+            
 
             Random rnd = Randomizer.GetRandomizer();
             int x_pos = rnd.Next(0, creature.manager.worldManager.MapWidth);
@@ -132,6 +136,7 @@ namespace GraveyardShift
             }
             else
                 return false;
+                */
         }
 
         public override bool InRange(Creature creature)

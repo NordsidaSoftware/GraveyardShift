@@ -33,7 +33,7 @@ namespace GraveyardShift
             Options.Add("Play");        
             Options.Add("Generate World"); 
             Options.Add("Save");      
-            Options.Add("Test");
+           
             generated = false;
 
             TopScreen =  root.AddConsole(width, 5);
@@ -115,7 +115,7 @@ namespace GraveyardShift
                         }
                     case "Test":
                         {
-                            manager.PushState(new WorldTestState(manager, this, root, 60, 40));
+                            //manager.PushState(new WorldTestState(manager, this, root, 60, 40));
                             break;
                         }
                 }

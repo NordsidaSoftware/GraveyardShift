@@ -60,6 +60,7 @@ namespace GraveyardShift
         internal void AddCreature(Creature c, Point region)
         {
             PopulationInRegion[region].creatures.Add(c);
+            
         }
 
         internal void RemoveCreature(Creature c, Point region)

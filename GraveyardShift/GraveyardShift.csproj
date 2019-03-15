@@ -62,6 +62,7 @@
     <Compile Include="Creatures\Item.cs" />
     <Compile Include="Creatures\Controllers\SoldierController.cs" />
     <Compile Include="Creatures\Player.cs" />
+    <Compile Include="Items\Item.cs" />
     <Compile Include="States\OverWorldMenu.cs" />
     <Compile Include="Utils\PriorityQueue.cs" />
     <Compile Include="World\Population.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="World\DataBase.cs" />
     <Compile Include="World\FOV_Map.cs" />
     <Compile Include="World\Overworld.cs" />
+    <Compile Include="World\Region.cs" />
     <Compile Include="World\WorldManager.cs" />
   </ItemGroup>
   <ItemGroup>

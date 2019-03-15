@@ -18,7 +18,7 @@ namespace GraveyardShift
         Point currentPosition;
         Region currentRegion;
 
-        public WorldTestState(StateManager manager, MainMenuState mainMenuState, Virtual_root_Console root, int width, int height):base(manager, root)
+        public WorldTestState(StateManager manager, MainMenuState mainMenuState, Virtual_root_Console root, int width, int height, int test):base(manager, root)
         {
             this.manager = manager;
             this.mainMenuState = mainMenuState;
@@ -73,6 +73,7 @@ namespace GraveyardShift
 
         private void drawCurrentRegion()
         {
+            /*
             currentRegion = new Region();
 
             byte hNW = overWorld[currentPosition.X - 1, currentPosition.Y - 1];
@@ -97,6 +98,7 @@ namespace GraveyardShift
                     currentRegion[x, y] = cellHeight;
                 }
             }
+            */
         }
 
         private float InterpolateLine(byte valueA, byte valueB, int x)

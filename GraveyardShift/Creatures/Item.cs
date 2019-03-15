@@ -1,7 +1,9 @@
 ﻿using System;
 
+// Not used any longer...
 namespace GraveyardShift
 {
+    /*
     [Serializable]
     public class Item
     {
@@ -16,4 +18,5 @@ namespace GraveyardShift
             this.range = range;
         }
     }
+    */
 }

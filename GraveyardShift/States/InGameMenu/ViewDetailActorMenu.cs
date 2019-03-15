@@ -68,6 +68,22 @@ namespace GraveyardShift
 
             int goap_line = 1;
             root.Print(goap, 1, goap_line, "Planner:"); goap_line += 2;
+
+            
+            Point center = new Point(creature.X_pos, creature.Y_pos);
+            Point camera = new Point(center.X - goap.screen_width / 2, center.Y - goap.screen_height / 2);
+            if ( camera.X < 0 ) { camera.X = 0; }
+            if ( camera.Y < 0 ) { camera.Y = 0; }
+
+
+            for ( int x = 0; x < goap.screen_width; x++ )
+            {
+                for ( int y = goap_line; y < goap.screen_height; y++ )
+                {
+                    goap.PutGlyphBackGround(Glyph.PLUS, x, y, creature.manager.worldManager.currentRegion.Background[x+camera.X, y+camera.Y]);
+                }
+            }
+            goap.PutGlyph(creature.glyph, center.X, center.Y);
           
 
             base.Draw();

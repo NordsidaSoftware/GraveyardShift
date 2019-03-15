@@ -402,34 +402,7 @@ namespace GraveyardShift
 
             else return new Point(0, 0);
 
-            /*
-            int origin = GetNeighborValue(x, y);
-            int N = GetNeighborValue(x, y - 1);
-            int S = GetNeighborValue(x, y + 1);
-            int E = GetNeighborValue(x - 1, y);
-            int W = GetNeighborValue(x + 1, y);
-            int NE = GetNeighborValue(x - 1, y - 1);
-            int NW = GetNeighborValue(x + 1, y - 1);
-            int SE = GetNeighborValue(x - 1, y + 1);
-            int SW = GetNeighborValue(x + 1, y + 1);
-
-
-
-
-            
-            if (NE < N && NE < S && NE < E && NE < W && NE < NW && NE < SE && NE < SW) { return new Point(-1, -1); }
-            if (SE < N && SE < E && SE < W && SE < NE && SE < NW && SE < S && SE < SW) { return new Point(-1, 1); }
-            if (NW < N && NW < W && NW < S && NW < NE && NW < W && NW < SE && NW < SW) { return new Point(1, -1); }
-            if (SW < N && SW < E && SW < S && SW < NE && SW < NW && SW < SE && SW < W) { return new Point(1, 1); }
-
-            if ( N < S && N < E && N < W && N < NE && N < NW && N < SE && N < SW ) { return new Point(0, -1); }
-            if ( S < N && S < E && S < W && S < NE && S < NW && S < SE && S < SW) { return new Point(0, 1); }
-            if ( E < N && E < W && E < S && E < NE && E < NW && E < SE && E < SW) { return new Point(-1, 0); }
-            if ( W < N && W < E && W < S && W < NE && S < NW && W < SE && W < SW) { return new Point(1, 0); }
-
            
-            else { return new Point(0, 0); }
-            */
         }
 
         private void CreateMountain()
@@ -512,8 +485,6 @@ namespace GraveyardShift
                     }
                 }
             }
-
-
         }
 
         internal int GetNeighborValue(int x, int y)
@@ -526,14 +497,5 @@ namespace GraveyardShift
         {
             return Seed * x * x + y;
         }
-    }
-
-    
-    public class Region
-    {
-        public int Seed { get; set; }
-        byte[,] Cells;
-        public byte this[int x, int y] {  get { return Cells[x, y]; }  set { Cells[x, y] = value; } }
-        public Region() { Cells = new byte[200, 200]; }
     }
 }

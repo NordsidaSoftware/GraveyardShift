@@ -77,15 +77,20 @@ namespace GraveyardShift
         public Point Camera { get; set; }
         public Point RegionCoordinate { get; set; }
 
-        public Region Region_Heightmap { get; set; }
-        public Color_Map Region_Background_Color_Map;
-        public Features_Map Region_Features;
+        //public Region Region_Heightmap { get; set; }
+        //public Color_Map Region_Background_Color_Map;
+        //public Features_Map Region_Features;
+
         public FOV_Map fov_Map;
         public Bool_Map visited_Map;
 
         public int MapWidth, MapHeight;
 
-        public bool drawOverWorld; // TEMP hack
+        // restructuring this class.
+        // instead of features, fov-map etc here. Have an current region containing all
+        // save and reload issues ?
+
+        public Region currentRegion;
 
         public WorldManager(int width, int height, int screenWidth, int screenHeight, int seed)
         {
@@ -104,35 +109,40 @@ namespace GraveyardShift
             Camera = new Point(0, 0);                    //    Viewport origin. Size like screen
             RegionCoordinate = new Point(33, 10);        //    Current Region 
 
-            GenerateCurrentRegionHeightmap();
-            GenerateLocalHeight(5);
-            GenerateBackgroundColorFromRegionHeightmap();
-            GenerateTiles();
-            GenerateContourlinesOnMap();
+           // GenerateCurrentRegionHeightmap();
+           // GenerateLocalHeight(5);
+           // GenerateBackgroundColorFromRegionHeightmap();
+           // GenerateTiles();
+           // GenerateContourlinesOnMap();
 
             visited_Map = new Bool_Map();
             fov_Map = new FOV_Map(visited_Map);
 
-            drawOverWorld = false;                       // TEMP hack
+            EnterNewRegion(0,0);
+            //currentRegion = CreateRegionFromOverwoldData();
+
         }
 
-        internal Point GetCreatureBed(Creature creature)  // HACK : Need a lot more...
+        private Region CreateRegionFromOverwoldData()
         {
-            Point p = new Point(0, 0);
-            for (int x = 0; x < MapWidth; x++)
-            {
-                for (int y = 0; y < MapHeight; y++)
-                {
-                    if (Region_Features[x, y] == (int)DB.Features.WALL) { p = new Point(x - 10, y - 10); }
-                }
-            }
-            return p;
+            Region generatedRegion = new Region(overWorld.GetSeed(RegionCoordinate.X, RegionCoordinate.Y));
+            generatedRegion.GenerateCurrentRegionHeightmap(overWorld, RegionCoordinate);
+            generatedRegion.GenerateLocalHeight();
+            generatedRegion.GenerateBackgroundColorFromRegionHeightmap();
+            generatedRegion.GenerateTiles(overWorld);
+            generatedRegion.GenerateContourlinesOnMap();
+            if ( overWorld.settlements.Contains(RegionCoordinate)) { generatedRegion.GenerateSettlement(); }
+
+            return generatedRegion;
         }
 
+       
+
+        #region moved Code
         //*******************************************************************
         //                      MAP GENERATION METHODS
         //*******************************************************************
-
+        /*
         private void GenerateCurrentRegionHeightmap()
         {
             Region_Heightmap = new Region();
@@ -241,7 +251,6 @@ namespace GraveyardShift
             if (overWorld.settlements.Contains(RegionCoordinate))
             {
                 CreateHouse();
-
             }
         }
 
@@ -362,17 +371,16 @@ namespace GraveyardShift
         {
             return (valueA + (valueB - valueA) * (x));
         }
+        */
+
+        #endregion  
 
         internal void EnterNewRegion(int dx, int dy)
         {
             RegionCoordinate += new Point(dx, dy);
 
+            currentRegion = CreateRegionFromOverwoldData();
 
-            GenerateCurrentRegionHeightmap();
-            GenerateLocalHeight(5);
-            GenerateBackgroundColorFromRegionHeightmap();
-            GenerateTiles();
-            GenerateContourlinesOnMap();
             visited_Map = new Bool_Map();
             fov_Map = new FOV_Map(visited_Map);
         }
@@ -401,7 +409,7 @@ namespace GraveyardShift
 
         internal bool LocationIsBlocked(int x, int y)
         {
-            return Region_Features.Blocked(x, y);
+            return currentRegion.Foreground.Blocked(x, y);
         }
 
 
@@ -447,7 +455,7 @@ namespace GraveyardShift
 
                 foreach (Point p in current.Neighbors())
                 {
-                    if (IsOnMap(p.X, p.Y) && !Region_Features.Blocked(p.X, p.Y))
+                    if (IsOnMap(p.X, p.Y) && !currentRegion.Foreground.Blocked(p.X, p.Y))
                     {
                         if (!CameFrom.ContainsKey(p))
                         { 
@@ -464,7 +472,7 @@ namespace GraveyardShift
             while (true)
             {
                 path.Push(step);
-                step = CameFrom[step]; // ERROR here. Target still not in camefrom list...
+                step = CameFrom[step]; 
                 if (step.X == origin.X && step.Y == origin.Y) { break; }
             }
             path.TrimExcess();
@@ -507,7 +515,7 @@ namespace GraveyardShift
             {
                 for (int y = 0; y < ScreenHeight; y++)
                 {
-                    int feature = Region_Features[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid];
+                    int feature = currentRegion.Foreground[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid];
 
                     Feature thing = DB.IntToItem[feature];
                     Glyph glyph = (Glyph)thing.glyph;
@@ -519,7 +527,7 @@ namespace GraveyardShift
                     if (fov_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])
                     {
                         screen.PutGlyphForeBack( glyph, x, y, fg,
-                        Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid]);
+                        currentRegion.Background[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid]);
 
 
                     }
@@ -531,7 +539,7 @@ namespace GraveyardShift
                         if (visited_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid])
                         {
                             screen.PutGlyphForeBack ( glyph, x, y, fg * 0.9f,
-                              Region_Background_Color_Map[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid] * 0.9f);
+                              currentRegion.Background[x + x_offset_into_mapgrid, y + y_offset_into_mapgrid] * 0.9f);
                         }
                         else
                         {

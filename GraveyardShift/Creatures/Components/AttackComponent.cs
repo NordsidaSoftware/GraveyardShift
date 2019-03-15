@@ -56,11 +56,11 @@ namespace GraveyardShift
 
                 if ( target != null )
                 {
-                    List<Attack> availableRangedAttacks = owner.Inventory.GetRangedAttacks();
-                    int random_attack_index = rnd.Next(availableRangedAttacks.Count);
-                    Attack attack = availableRangedAttacks.ElementAt(random_attack_index);
+                  //  List<Attack> availableRangedAttacks = owner.Inventory.GetRangedAttacks();
+                  //  int random_attack_index = rnd.Next(availableRangedAttacks.Count);
+                  //  Attack attack = availableRangedAttacks.ElementAt(random_attack_index);
 
-                    target.Distribute(new CPMessage() { type = CPMessageType.DAMAGE, attack = attack });
+                  //  target.Distribute(new CPMessage() { type = CPMessageType.DAMAGE, attack = attack });
                 }
             }
         }

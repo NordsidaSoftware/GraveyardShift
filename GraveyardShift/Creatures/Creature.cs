@@ -23,6 +23,9 @@ namespace GraveyardShift
             items.Add(i);
         }
 
+        /*
+         * Methods removed for now. New Item strucure...
+         * 
         internal List<Item> GetAvailableItemAttacks()
         {
             List<Item> returnList = new List<Item>();
@@ -56,6 +59,8 @@ namespace GraveyardShift
             }
             return returnList;
         }
+
+    */
     }
 
     [Serializable]
@@ -215,6 +220,19 @@ namespace GraveyardShift
             States.Add("isMobile", body.CanMove);                                   // Ex. of creature 'local' state
             States.Add("rested", body.isRested);
             return States;
+        }
+
+        internal Item GetItem(string tag)
+        {
+            foreach (Item item in manager.worldManager.currentRegion.Items)
+            {
+                if (item.tags.Contains(tag))
+                {
+                    return item;
+                }
+            }
+            return null;
+
         }
     }
 }
