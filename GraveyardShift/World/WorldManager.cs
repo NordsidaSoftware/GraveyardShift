@@ -473,7 +473,7 @@ namespace GraveyardShift
             {
                 path.Push(step);
                 step = CameFrom[step]; 
-                if (step.X == origin.X && step.Y == origin.Y) { break; }
+                if (step.X == origin.X && step.Y == origin.Y) { path.Push(step); break; }
             }
             path.TrimExcess();
 

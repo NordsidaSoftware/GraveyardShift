@@ -74,16 +74,36 @@ namespace GraveyardShift
             Point camera = new Point(center.X - goap.screen_width / 2, center.Y - goap.screen_height / 2);
             if ( camera.X < 0 ) { camera.X = 0; }
             if ( camera.Y < 0 ) { camera.Y = 0; }
-
+            if ( camera.X > creature.manager.worldManager.MapWidth-(goap.screen_width+1) ) { camera.X = creature.manager.worldManager.MapWidth - (goap.screen_width + 1); }
+            if ( camera.Y > creature.manager.worldManager.MapHeight-(goap.screen_height+1)) { camera.Y = creature.manager.worldManager.MapHeight - (goap.screen_height + 1); }
 
             for ( int x = 0; x < goap.screen_width; x++ )
             {
                 for ( int y = goap_line; y < goap.screen_height; y++ )
                 {
-                    goap.PutGlyphBackGround(Glyph.PLUS, x, y, creature.manager.worldManager.currentRegion.Background[x+camera.X, y+camera.Y]);
+                    // BACKGROUND IN CELL
+                    goap.PutGlyphBackGround(Glyph.SPACE1, x, y, creature.manager.worldManager.currentRegion.Background[x+camera.X, y+camera.Y]);
+
+                    // FOREGROUND (ITEM ) IN CELL
+                    int feature = creature.manager.worldManager.currentRegion.Foreground[x + camera.X, y + camera.Y];
+                    Feature thing = DB.IntToItem[feature];
+                    
+                    goap.PutGlyph(thing.glyph, x, y, VAColor.White);
                 }
             }
-            goap.PutGlyph(creature.glyph, center.X, center.Y);
+            // CREATURE GLYPH
+            goap.PutGlyph(creature.glyph, center.X - camera.X, center.Y - camera.Y);
+
+            foreach (ComponentsParts CP in creature.components )
+            {
+                if (CP is FSM fsm)
+                {
+                    foreach (Point p in fsm.Path)
+                    {
+                        goap.PutGlyphForeground(Glyph.BULLET, p.X - camera.X, p.Y - camera.Y, VAColor.Orange);
+                    }
+                }
+            }
           
 
             base.Draw();

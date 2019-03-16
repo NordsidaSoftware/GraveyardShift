@@ -25,10 +25,15 @@ namespace GraveyardShift
             {
                 Creature c = new Creature(creatureManager)
                 {
-                    Name = "GOAP agent",
-                    X_pos = 25,
-                    Y_pos = 25
+                    Name = "GOAP agent"
                 };
+
+                int x_pos = rnd.Next(0, world.MapWidth - 1);
+                int y_pos = rnd.Next(0, world.MapHeight - 1);
+                // TODO : check here so not spawned on top of other creature. Will f** up pathfinding...:-)
+                c.X_pos = x_pos;
+                c.Y_pos = y_pos;
+
                 c.controller = new SoldierController(c);
                 c.controller.Initialize();
                 c.controller.CreateBody();

@@ -9,6 +9,9 @@ namespace GraveyardShift
         public Stack<FSMstate> states;
         public GOAPlanner goaplanner;
         public Queue<GOAP_action> currentPlan;
+
+        // DEBUG to get the path of creature...
+        public Stack<Point> Path;
         
         public FSM(Creature owner):base(owner)
         {
@@ -16,6 +19,9 @@ namespace GraveyardShift
             states = new Stack<FSMstate>();
             currentPlan = new Queue<GOAP_action>();
             SetupStates();
+
+            // Path debug :
+            Path = new Stack<Point>();
         }
 
       
@@ -144,6 +150,8 @@ namespace GraveyardShift
             Console.WriteLine(fsm.owner.Name + " On Enter Move State");
             path = fsm.owner.manager.worldManager.GreedyBestFirstSearch(new Point(fsm.owner.X_pos, fsm.owner.Y_pos), fsm.currentPlan.Peek().target);
 
+            // PAth debug
+            fsm.Path = path;
         }
 
         public override void OnExit()
@@ -157,8 +165,20 @@ namespace GraveyardShift
             if ( fsm.currentPlan.Peek().InRange(fsm.owner)) { fsm.PopState(); path.Clear(); return; } // in range. Stop moving
 
             // still not in range. 
-            if ( path.Count > 0)
-                nextStep = path.Pop();     // need a check for error / trouble here...
+            if (path.Count > 0)
+            {
+                // nextStep = path.Pop();     
+                // Test to check next step is a possible move
+                Point testNext = path.Peek();
+                if ( ! fsm.owner.manager.worldManager.LocationIsBlocked(testNext.X, testNext.Y))
+                {
+                    if ( ! fsm.owner.manager.LocationIsOccupied(testNext.X, testNext.Y))
+                    {
+                        nextStep = path.Pop();
+                    }
+                }
+
+            }
             fsm.owner.Distribute(new CPMessage()
             {
                 type = CPMessageType.TARGET,
