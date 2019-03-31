@@ -12,12 +12,13 @@ namespace GraveyardShift
     public class PlayState : State
     {
         VirtualConsole screen;
-        WorldManager world;
 
+        public WorldManager world;
         public CreatureManager creatureManager;
+        public ItemManager itemManager;
 
-        public PlayState(StateManager manager, WorldManager world, CreatureManager creature, Virtual_root_Console root, int width, int height) 
-            : base(manager, root)
+        public PlayState(StateManager manager, WorldManager world, CreatureManager creature, ItemManager itemManager, 
+                         Virtual_root_Console root, int width, int height) : base(manager, root)
         {
             screen = root.AddConsole(width, height);
             screen.X_Offset = 10;
@@ -25,14 +26,13 @@ namespace GraveyardShift
 
             this.world = world;
             this.creatureManager = creature;
+            this.itemManager = itemManager;
             
         }
 
         public override void Update()
         {
             if (root.input.wasKeyPressed(Keys.Escape)) {  manager.PopState(); }
-
-          //  if (root.input.wasKeyPressed(Keys.Enter)) { manager.PushState(new IngameMenu(manager, root, this)); }
 
             if ( root.input.wasKeyPressed(Keys.Tab)) { manager.PushState(new OverWorldMenu(manager, root, this, world, creatureManager)); }
 

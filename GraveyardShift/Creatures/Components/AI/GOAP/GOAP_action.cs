@@ -115,10 +115,11 @@ namespace GraveyardShift
 
         public override bool CheckProceduralPrecondition(Creature creature)
         {
-            Item sleepItem = creature.GetItem("bed");
-            if ( sleepItem != null ) { target = sleepItem.Position; return true; }
-            else { return false; }
-
+            // Item sleepItem = creature.GetItem("bed");
+            // if ( sleepItem != null ) { target = sleepItem.Position; return true; }
+            // else { return false; }
+            target = new Point(20, 20);
+            return true;
             /*
             target = creature.manager.worldManager.GetCreatureBed(creature);
             if (target.X != 0)

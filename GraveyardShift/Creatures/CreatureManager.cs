@@ -24,18 +24,20 @@ namespace GraveyardShift
         public WorldManager worldManager;
         public WorldStates worldStates;
 
+        public ItemManager itemManager;
+
         public bool ResetUpdateLoop = false;            // Needed when player exits region. 
 
      
 
-        public CreatureManager(WorldManager world, Population population)
+        public CreatureManager(WorldManager world, Population population, ItemManager itemManager)
         {
             Random rnd = Randomizer.GetRandomizer();
             effects = new List<Effect>();
             worldManager = world;
             CurrentRegion = world.RegionCoordinate;
             worldStates = new WorldStates(world);
-
+            this.itemManager = itemManager;
 
             worldPopulation = population;
             SetRegion(0, 0);          

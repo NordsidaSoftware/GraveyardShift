@@ -7,7 +7,7 @@ namespace GraveyardShift
 {
     internal class MainMenuState : State
     {
-        private StateManager stateManager;
+        //private StateManager stateManager;
         private int width;
         private int height;
         VirtualConsole TopScreen;
@@ -20,6 +20,7 @@ namespace GraveyardShift
         bool generated;
         public WorldManager world { get; set; }
         public CreatureManager creatureManager { get; set; }
+        public ItemManager itemManager { get; set; }
 
         public MainMenuState(StateManager manager, Virtual_root_Console root, int width, int height) : base(manager, root)
         {
@@ -95,7 +96,7 @@ namespace GraveyardShift
                         {
                             if (generated)
                             {
-                                manager.PushState(new PlayState(manager, world, creatureManager, root, 60, 40));
+                                manager.PushState(new PlayState(manager, world, creatureManager, itemManager, root, 60, 40));
                             }
                             break;
                         }

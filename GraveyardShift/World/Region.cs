@@ -12,7 +12,7 @@ namespace GraveyardShift
         public Features_Map Foreground;
         private Random rnd;
 
-        public List<Item> Items;
+        //public List<Item> Items;
 
         public byte this[int x, int y] { get { return Height[x, y]; } set { Height[x, y] = value; } }
 
@@ -21,7 +21,7 @@ namespace GraveyardShift
             Seed = seed;
             Height = new byte[200, 200];
             rnd = new Random(Seed);
-            Items = new List<Item>();
+           // Items = new List<Item>();
         }
 
         public static float InterpolateLine(float valueA, float valueB, float x)
@@ -177,8 +177,11 @@ namespace GraveyardShift
             CreateHouse();
         }
 
+       
+
         private void CreateHouse()
         {
+            
             // Random generation of house size
             int x = rnd.Next(20, 200 - 20);
             int y = rnd.Next(20, 200 - 20);
@@ -186,31 +189,26 @@ namespace GraveyardShift
             int h = rnd.Next(5, 15);
             Rectangle house = new Rectangle(x, y, w, h);
 
+            
+
             // Create the walls
             foreach ( Point p in house.Walls()) { Foreground[p.X, p.Y] = (int)DB.Features.WALL; }
-            /*
-            for (int Hor_Wall = house.Left; Hor_Wall <= house.Right; Hor_Wall++)
-            {
-                Foreground[Hor_Wall, house.Top] = (int)DB.Features.WALL;
-                Foreground[Hor_Wall, house.Bottom] = (int)DB.Features.WALL;
-            }
-            for (int Vert_Wall = house.Top; Vert_Wall < house.Bottom; Vert_Wall++)
-            {
-                Foreground[house.Left, Vert_Wall] = (int)DB.Features.WALL;
-                Foreground[house.Right, Vert_Wall] = (int)DB.Features.WALL;
-            }
-            */
+           
 
             // Create a door into the house
             // Point door = house.Walls()[rnd.Next(house.Walls().Length)];
             Point door = new Point(house.Center().X, house.Bottom);
             Foreground[door.X, door.Y] = (int)DB.Features.DOOR;
 
-            Item ItemHouse = new Building(house.Center());
-            Item bed = new Bed(new Point(house.Center().X + 1, house.Center().Y));
-            bed.tags.Add("bed");
-            Items.Add(ItemHouse);
-            Items.Add(bed);
+            //Item ItemHouse = new Building(house.Center());
+            //ItemHouse.AddElement(house);
+            //ItemHouse.AddElement(door);
+
+            //Item bed = new Bed(new Point(house.Center().X + 1, house.Center().Y));
+            //bed.tags.Add("bed");
+      
+            //Items.Add(ItemHouse);
+            //Items.Add(bed);
 
         }
     

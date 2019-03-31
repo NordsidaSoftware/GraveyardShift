@@ -1,14 +1,15 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using System;
 using System.Collections.Generic;
 using VAC;
 
 namespace GraveyardShift
 {
+    // *************************************  S T A T E  C L A S S ******************************
+    //
+   
     public class State
     {
-       
         internal StateManager manager;
 
         internal List<VirtualConsole> consoles;
@@ -22,7 +23,7 @@ namespace GraveyardShift
         }
 
         public virtual void OnEnter() { }
-        public virtual void OnExit() {  }
+        public virtual void OnExit() { }
         public virtual void Update() { }
         public virtual void Draw()
         {
@@ -31,12 +32,14 @@ namespace GraveyardShift
                 root.Blit(con, 0, 0, con.screen_width, con.screen_height, root, con.X_Offset, con.Y_Offset);
             }
         }
-
     }
+
+
+    //  *******************************  S T A T E  M A N A G E R *******************************
+    //
 
     public class StateManager
     {
-
         private Stack<State> stack;
         private Game game;
         Virtual_root_Console root;
@@ -47,16 +50,12 @@ namespace GraveyardShift
             this.root = root;
             stack = new Stack<State>();
           
-
             InitializeStates();
-
         }
 
         private void InitializeStates()
         {
-            
-            PushState(new MainMenuState(this, root, 60, 40));
-           
+            PushState(new MainMenuState(this, root, 60, 40));  
         }
 
         public bool Update()
@@ -68,8 +67,8 @@ namespace GraveyardShift
                 stack.Peek().Update();
                 return true;
             }
-            return false;
 
+            return false;
         }
 
         public void Draw(SpriteBatch spriteBatch)
@@ -92,6 +91,7 @@ namespace GraveyardShift
             {
                 stack.Peek().OnExit();
             }
+
             return stack.Pop();
         }
     }

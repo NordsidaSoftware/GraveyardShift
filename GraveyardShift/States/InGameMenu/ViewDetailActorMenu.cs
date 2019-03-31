@@ -48,6 +48,13 @@ namespace GraveyardShift
                 root.Print(menu, 1, line, BP.ToString());
                 line++;
             }
+            root.Print(menu, 1, line, "*** Inventory ***");
+            line = line + 1;
+            foreach (Item item in creature.Inventory.items)
+            {
+                root.Print(menu, 1, line, item.ToString());
+                line++;
+            }
 
             root.Print(menu, 1, line, "**** EFFECTS **** ");
             line++;
@@ -59,7 +66,7 @@ namespace GraveyardShift
             }
 
             int details_line = 1;
-            root.Print(details, 1, details_line, "DETAILS"); details_line += 2;
+            root.Print(details, 1, details_line, "*** Details ***"); details_line += 2;
             root.Print(details, 1, details_line, "IsActive : " + creature.IsActive.ToString()); details_line += 2;
             root.Print(details, 1, details_line, "IsAlive : " + creature.body.IsAlive.ToString()); details_line += 2;
             root.Print(details, 1, details_line, "CanMove : " + creature.body.CanMove.ToString()); details_line += 2;

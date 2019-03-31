@@ -4,8 +4,10 @@ using VAC;
 
 namespace GraveyardShift
 {
+    /*
     internal class WorldTestState : State
         // Test state no longer used. Created an overworld for the first time...
+        
     {
         private MainMenuState mainMenuState;
         private int screen_width;
@@ -98,7 +100,7 @@ namespace GraveyardShift
                     currentRegion[x, y] = cellHeight;
                 }
             }
-            */
+            
         }
 
         private float InterpolateLine(byte valueA, byte valueB, int x)
@@ -128,4 +130,5 @@ namespace GraveyardShift
             
         }
     }
+    */
 }

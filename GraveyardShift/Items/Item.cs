@@ -1,40 +1,91 @@
-﻿using System.Collections.Generic;
-using VAC;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace GraveyardShift
 {
-    public interface IUsable
+    public enum Slot {  NONE, HEAD, NECK, TORSO, LEFT_ARM, RIGHT_ARM, PELVIS, RIGHT_FOOT, LEFT_FOOT }
+    public enum Tag { NONE, WEAPON, WEARABLE, EATABLE }
+
+    public class Item
     {
-        void Use(Creature user);
-    }
+        public string Name { get; set; }
+        public List<ItemForm> Elements = new List<ItemForm>();
+        public List<ItemComponents> Components = new List<ItemComponents>();
 
-    public abstract class Item
-    {
-        public List<string> tags;
-        public Glyph glyph;
-        public VAColor color;
-
-        public Point Position { get; internal set; }
-    }
-
-    public class Building : Item
-    {
-        public Building(Point position)
-        { glyph = Glyph.SPACE1; color = VAColor.Black; Position = position; tags = new List<string>(); }
-    }
-
-    public class Bed : Item, IUsable
-    {
-        public Bed(Point position) { glyph = Glyph.LINE; color = VAColor.Red; Position = position; tags = new List<string>(); }
-
-        public void Use(Creature user)
+        public override string ToString()
         {
-            user.body.isRested = true;
+            StringBuilder sb = new StringBuilder();
+            
+            sb.Append("Name : " + Name);
+            sb.Append(" <");
+            foreach (ItemForm element in Elements)
+            {
+                sb.Append( element.Name + " ");
+            }
+            sb.Append(" >");
+            sb.AppendLine();
+
+            foreach (ItemComponents itemComponent in Components )
+            {
+                sb.Append(itemComponent.ToString());
+            }
+
+            return sb.ToString();
+        }
+    }
+
+    public abstract class ItemComponents {
+        public Item owner;
+        public ItemComponents(Item owner ) { this.owner = owner; }
+    }
+
+    public class WeaponComponent : ItemComponents
+    {
+        byte Grip;
+        private byte Attack;
+        byte Defence;
+
+        public byte GetAttack
+        {
+            get
+            {
+                if (owner.Elements.Count > 0)
+                {
+                    return (byte)(Attack * owner.Elements[0].Edge);
+
+                }
+                return Attack;
+            }
+        }
+        public WeaponComponent(Item owner, byte grip = 1, byte Attack = 0, byte Defence = 0) : base(owner)
+        {
+            Grip = grip;
+            this.Attack = Attack;
+            this.Defence = Defence;
         }
 
         public override string ToString()
         {
-            return "Bed";
+            return "Attack : " + GetAttack + " Defence : " + Defence.ToString();
         }
     }
+
+    public class WearableComponent:ItemComponents
+    {
+        public Slot Slot;
+        public bool Equipped;
+
+        public WearableComponent(Item owner, Slot Slot = Slot.NONE) : base(owner)
+        {
+            this.Slot = Slot;
+        }
+
+        public override string ToString()
+        {
+            return "Slot : " + Slot.ToString() + " Eq: " + Equipped.ToString();
+        }
+    }
+
+
 }

@@ -21,7 +21,7 @@ namespace GraveyardShift
             rnd = new Random(seed);
             List<Creature> initialPopulation = new List<Creature>();
 
-            for (int number_of_initial_persons = 0; number_of_initial_persons < 2; number_of_initial_persons++)
+            for (int number_of_initial_persons = 0; number_of_initial_persons < 20; number_of_initial_persons++)
             {
                 Creature c = new Creature(creatureManager)
                 {

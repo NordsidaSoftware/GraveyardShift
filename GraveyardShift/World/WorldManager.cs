@@ -10,7 +10,7 @@ namespace GraveyardShift
     //*********************************************************************************
     //                                        THE FEATURE CLASS
     //                                      called 'feature' for now
-    //                                      all terrain features e.g tree, rock etc
+    //                                     
     //*********************************************************************************
 
     [Serializable]
@@ -65,7 +65,7 @@ namespace GraveyardShift
     [Serializable]
     public class WorldManager
     {
-        Random rnd;
+        //Random rnd;
 
         public int ScreenWidth, ScreenHeight;
 

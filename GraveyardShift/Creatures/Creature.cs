@@ -224,12 +224,12 @@ namespace GraveyardShift
 
         internal Item GetItem(string tag)
         {
-            foreach (Item item in manager.worldManager.currentRegion.Items)
+            foreach (Item item in manager.itemManager.GetRegionItems(RegionX, RegionY))
             {
-                if (item.tags.Contains(tag))
-                {
-                    return item;
-                }
+           //     if (item.tags.Contains(tag))
+           //     {
+           //         return item;
+           //     }
             }
             return null;
 

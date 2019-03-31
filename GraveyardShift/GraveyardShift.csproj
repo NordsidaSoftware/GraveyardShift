@@ -59,13 +59,17 @@
     <Compile Include="Creatures\Controllers\PlayerController.cs" />
     <Compile Include="Creatures\Controllers\VicarController.cs" />
     <Compile Include="Creatures\Controllers\ZombieController.cs" />
-    <Compile Include="Creatures\Item.cs" />
     <Compile Include="Creatures\Controllers\SoldierController.cs" />
     <Compile Include="Creatures\Player.cs" />
     <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\ItemFactory.cs" />
+    <Compile Include="Items\ItemFileParser.cs" />
+    <Compile Include="Items\StaticItemsBank.cs" />
+    <Compile Include="Items\ItemCollection.cs" />
+    <Compile Include="Items\ItemManager.cs" />
     <Compile Include="States\OverWorldMenu.cs" />
     <Compile Include="Utils\PriorityQueue.cs" />
-    <Compile Include="World\Population.cs" />
+    <Compile Include="Creatures\Population.cs" />
     <Compile Include="Creatures\WorldStates.cs" />
     <Compile Include="Utils\Circle.cs" />
     <Compile Include="Utils\ErrorHandler.cs" />
@@ -110,6 +114,9 @@
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
     <None Include="app.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Windows\x86\Debug\Content\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
